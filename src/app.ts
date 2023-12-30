@@ -1,15 +1,17 @@
 import express, { NextFunction, Request, Response } from "express";
 import logger from "./config/logger";
 import createHttpError, { HttpError } from "http-errors";
+import authRouter from "./routes/authRoutes";
 
 const app = express();
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
     res.send(`Welcome to mecom's index page of path
     ${req.protocol}://${req.get("host")}${req.originalUrl}`);
 });
 
-app.get("/httperror", async (req, res, next) => {
+app.get("/httperror", (req, res, next) => {
     const err = createHttpError(
         401,
         "Hey, you don't have premission to access this page",
