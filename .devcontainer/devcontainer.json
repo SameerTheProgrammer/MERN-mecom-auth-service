@@ -1,72 +1,72 @@
 {
-	"name": "Node.js & TypeScript",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
-	},
-	"forwardPorts": [5501],  
+    "name": "Node.js & TypeScript",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "forwardPorts": [5501],
     "portsAttributes": {
         "5501": {
             "label": "Auth-Service",
             "onAutoForward": "notify"
         }
     },
-	"postCreateCommand": "npm install",
-	"customizations": {
-		"vscode":{
-			"extensions": [
-				"EliverLara.andromeda",
-				"NuclleaR.vscode-extension-auto-import",
-				"mikestead.dotenv",
-				"usernamehw.errorlens",
-				"dbaeumer.vscode-eslint",
-				"SeyyedKhandon.firacode",
-				"xabikos.JavaScriptSnippets",
-				"PKief.material-icon-theme",
-				"esbenp.prettier-vscode",
-				"aaron-bond.better-comments",
-				"kisstkondoros.vscode-codemetrics",
-				"codezombiech.gitignore",
-				"yoavbls.pretty-ts-errors",
-				"eamodio.gitlens",
-				"TabNine.tabnine-vscode",
-				"DanielSanMedium.dscodegpt"
-			],
-			"settings":{
-				"terminal.integrated.confirmOnKill": "always",
-				"editor.fontFamily": "Fira Code",
-				"editor.fontLigatures": true,
-				"workbench.colorTheme": "Andromeda",
-				"workbench.iconTheme": "material-icon-theme",
-				"editor.minimap.enabled": false,
-				"editor.lineHeight": 2,
-				"editor.formatOnSave": true,
-				"[typescript]": {
-				  "editor.defaultFormatter": "esbenp.prettier-vscode"
-				},
-				"terminal.integrated.fontFamily": "'Fira Code'",
-				"editor.mouseWheelZoom": true,
-				"editor.fontWeight": "normal",
-				"diffEditor.ignoreTrimWhitespace": false,
-				"editor.renderWhitespace": "all",
+    "postCreateCommand": "npm install",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "EliverLara.andromeda",
+                "NuclleaR.vscode-extension-auto-import",
+                "mikestead.dotenv",
+                "usernamehw.errorlens",
+                "dbaeumer.vscode-eslint",
+                "SeyyedKhandon.firacode",
+                "xabikos.JavaScriptSnippets",
+                "PKief.material-icon-theme",
+                "esbenp.prettier-vscode",
+                "aaron-bond.better-comments",
+                "kisstkondoros.vscode-codemetrics",
+                "codezombiech.gitignore",
+                "yoavbls.pretty-ts-errors",
+                "eamodio.gitlens",
+                "TabNine.tabnine-vscode",
+                "DanielSanMedium.dscodegpt"
+            ],
+            "settings": {
+                "terminal.integrated.confirmOnKill": "always",
+                "editor.fontFamily": "Fira Code",
+                "editor.fontLigatures": true,
+                "workbench.colorTheme": "Andromeda",
+                "workbench.iconTheme": "material-icon-theme",
+                "editor.minimap.enabled": false,
+                "editor.lineHeight": 2,
+                "editor.formatOnSave": true,
+                "[typescript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "terminal.integrated.fontFamily": "'Fira Code'",
+                "editor.mouseWheelZoom": true,
+                "editor.fontWeight": "normal",
+                "diffEditor.ignoreTrimWhitespace": false,
+                "editor.renderWhitespace": "all",
 
-				// Add your key bindings here
-				"keyboard.dispatch": "keyCode",
-				"keyboard.dispatchCtrlShiftAltKeyCode": [
-				  {
-					"key": "ctrl+shift+d",
-					"command": "editor.action.copyLinesUpAction",
-					"when": "editorTextFocus && !editorReadonly"
-				  },
-				  {
-					"key": "ctrl+d",
-					"command": "editor.action.copyLinesDownAction",
-					"when": "editorTextFocus && !editorReadonly"
-				  }
-				]
-			}
-		}
-	}
-	// "remoteUser": "root"
+                // Add your key bindings here
+                "keyboard.dispatch": "keyCode",
+                "keyboard.dispatchCtrlShiftAltKeyCode": [
+                    {
+                        "key": "ctrl+shift+d",
+                        "command": "editor.action.copyLinesUpAction",
+                        "when": "editorTextFocus && !editorReadonly"
+                    },
+                    {
+                        "key": "ctrl+d",
+                        "command": "editor.action.copyLinesDownAction",
+                        "when": "editorTextFocus && !editorReadonly"
+                    }
+                ]
+            }
+        }
+    }
+    // "remoteUser": "root"
 }
