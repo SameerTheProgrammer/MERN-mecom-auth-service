@@ -3,8 +3,8 @@ import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
-import { truncateTables } from "../../src/utils/index";
 import { RegisterResponse } from "../../src/types";
+import { Roles } from "./../../src/contants/index";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -14,7 +14,8 @@ describe("Post /auth/register", () => {
     });
 
     beforeEach(async () => {
-        await truncateTables(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     afterAll(async () => {
@@ -94,6 +95,24 @@ describe("Post /auth/register", () => {
 
             // Assert
             expect((response.body as RegisterResponse).id).toBeDefined();
+        });
+
+        it("should user have customer role", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "sameer1234",
+            };
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const userRespository = connection.getRepository(User);
+            const user = await userRespository.find();
+
+            expect(user[0].role).toBe(Roles.Customer);
         });
     });
 
