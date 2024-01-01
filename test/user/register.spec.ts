@@ -4,6 +4,7 @@ import { User } from "../../src/entity/User";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { truncateTables } from "../../src/utils/index";
+import { RegisterResponse } from "../../src/types";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -34,6 +35,7 @@ describe("Post /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+
             // Assert
             expect(response.status).toBe(201);
         });
@@ -41,7 +43,7 @@ describe("Post /auth/register", () => {
         it("should return valid json response", async () => {
             // Arange
             const userData = {
-                firstName: "sameer",
+                firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: "sameer1234",
@@ -50,6 +52,7 @@ describe("Post /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+
             // Assert
             expect(
                 (response.headers as Record<string, string>)["content-type"],
@@ -59,7 +62,7 @@ describe("Post /auth/register", () => {
         it("should presist the user data in the database", async () => {
             // Arange
             const userData = {
-                firstName: "sameer",
+                firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: "sameer1234",
@@ -74,6 +77,23 @@ describe("Post /auth/register", () => {
             expect(user[0].firstName).toBe(userData.firstName);
             expect(user[0].lastName).toBe(userData.lastName);
             expect(user[0].email).toBe(userData.email);
+        });
+
+        it("should return an id of created user", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "sameer1234",
+            };
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            expect((response.body as RegisterResponse).id).toBeDefined();
         });
     });
 
