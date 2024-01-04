@@ -18,12 +18,14 @@ export class AuthController {
     ) {
         try {
             const { firstName, lastName, email, password } = req.body;
+
             this.logger.debug("New resquest to register a user", {
                 firstName,
                 lastName,
                 email,
                 password: "*****",
             });
+
             const user = await this.userService.create({
                 firstName,
                 lastName,

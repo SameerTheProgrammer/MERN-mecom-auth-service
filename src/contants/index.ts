@@ -3,3 +3,5 @@ export const Roles = {
     Admin: "admin",
     Manager: "manager",
 } as const;
+
+// export const saltRounds = 10;

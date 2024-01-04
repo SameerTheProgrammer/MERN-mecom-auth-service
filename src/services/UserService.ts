@@ -3,17 +3,29 @@ import { User } from "../entity/User";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
 import { Roles } from "./../contants/index";
+import bcrypt from "bcrypt";
 
 export class UserService {
     constructor(private userRespository: Repository<User>) {}
 
     async create({ firstName, lastName, email, password }: UserData) {
+        // check is email is already registered or not
+        const user = await this.userRespository.findOne({ where: { email } });
+        if (user) {
+            const error = createHttpError(401, "This email already exists");
+            throw error;
+        }
+
+        // converting normal password to hashed password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         try {
             return await this.userRespository.save({
                 firstName,
                 lastName,
                 email,
-                password,
+                password: hashedPassword,
                 role: Roles.Customer,
             });
         } catch (error) {

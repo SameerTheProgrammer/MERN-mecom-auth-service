@@ -114,6 +114,45 @@ describe("Post /auth/register", () => {
 
             expect(user[0].role).toBe(Roles.Customer);
         });
+
+        it("should store hashed password in the database", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "sameer1234",
+            };
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const userRespository = connection.getRepository(User);
+            const user = await userRespository.find();
+
+            expect(user[0].password).not.toBe(userData.password);
+            expect(user[0].password).toHaveLength(60);
+            expect(user[0].password).toMatch(/^\$2b\$\d+\$/);
+        });
+
+        it("should return 400 status code if email is already exists", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "sameer1234",
+            };
+            const userRespository = connection.getRepository(User);
+            await userRespository.save({ ...userData, role: Roles.Customer });
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            expect(response.statusCode).toBe(401);
+        });
     });
 
     // Sad Path
