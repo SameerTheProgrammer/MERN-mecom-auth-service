@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "../../src/app";
-import { User } from "../../src/entity/User";
+import { User } from "../../src/entity/User.entity";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
-import { RegisterResponse } from "../../src/types";
-import { Roles } from "./../../src/contants/index";
+import { RegisterResponse } from "../../src/types/index.types";
+import { Roles } from "../../src/contants/index.constant";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -151,7 +151,10 @@ describe("Post /auth/register", () => {
                 .send(userData);
 
             // Assert
-            expect(response.statusCode).toBe(401);
+            const user = await userRespository.find();
+
+            expect(response.statusCode).toBe(400);
+            expect(user).toHaveLength(1);
         });
     });
 

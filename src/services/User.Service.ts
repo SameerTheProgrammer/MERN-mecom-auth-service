@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
-import { User } from "../entity/User";
-import { UserData } from "../types";
+import { User } from "../entity/User.entity";
+import { UserData } from "../types/index.types";
 import createHttpError from "http-errors";
-import { Roles } from "./../contants/index";
+import { Roles } from "../contants/index.constant";
 import bcrypt from "bcrypt";
 
 export class UserService {
@@ -12,7 +12,7 @@ export class UserService {
         // check is email is already registered or not
         const user = await this.userRespository.findOne({ where: { email } });
         if (user) {
-            const error = createHttpError(401, "This email already exists");
+            const error = createHttpError(400, "This email already exists");
             throw error;
         }
 

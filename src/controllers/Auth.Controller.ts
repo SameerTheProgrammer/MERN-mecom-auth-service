@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
-import { RegisterUserRequest } from "../types";
-import { UserService } from "../services/UserService";
+import { RegisterUserRequest } from "../types/index.types";
+import { UserService } from "../services/User.Service";
 import { Logger } from "winston";
 
 export class AuthController {

@@ -1,8 +1,8 @@
 import exprees from "express";
-import { AuthController } from "../controllers/AuthController";
-import { UserService } from "../services/UserService";
+import { AuthController } from "../controllers/Auth.Controller";
+import { UserService } from "../services/User.Service";
 import { AppDataSource } from "../config/data-source";
-import { User } from "../entity/User";
+import { User } from "../entity/User.entity";
 import logger from "../config/logger";
 
 const router = exprees.Router();
