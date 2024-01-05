@@ -25,6 +25,7 @@ export class AuthController {
                     errors: result.array(),
                 });
             }
+
             const { firstName, lastName, email, password } = req.body;
 
             this.logger.debug("New resquest to register a user", {
