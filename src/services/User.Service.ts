@@ -12,7 +12,7 @@ export class UserService {
         // check is email is already registered or not
         const user = await this.userRespository.findOne({ where: { email } });
         if (user) {
-            const error = createHttpError(400, "This email already exists");
+            const error = createHttpError(400, "Email already exists");
             throw error;
         }
 

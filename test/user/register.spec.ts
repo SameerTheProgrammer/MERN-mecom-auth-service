@@ -30,7 +30,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer123",
+                password: "S@meer1234",
             };
             // Act
             const response = await request(app)
@@ -38,7 +38,7 @@ describe("Post /auth/register", () => {
                 .send(userData);
 
             // Assert
-            expect(response.status).toBe(201);
+            expect(response.statusCode).toBe(201);
         });
 
         it("should return valid json response", async () => {
@@ -47,7 +47,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             // Act
             const response = await request(app)
@@ -66,7 +66,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             // Act
             await request(app).post("/auth/register").send(userData);
@@ -86,7 +86,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             // Act
             const response = await request(app)
@@ -103,7 +103,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             // Act
             await request(app).post("/auth/register").send(userData);
@@ -121,7 +121,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             // Act
             await request(app).post("/auth/register").send(userData);
@@ -141,7 +141,7 @@ describe("Post /auth/register", () => {
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
-                password: "sameer1234",
+                password: "S@meer1234",
             };
             const userRespository = connection.getRepository(User);
             await userRespository.save({ ...userData, role: Roles.Customer });
@@ -159,5 +159,25 @@ describe("Post /auth/register", () => {
     });
 
     // Sad Path
-    describe("Fiels are missing", () => {});
+    describe("Fields are missing", () => {
+        it("should return 400 status code if email field is missing", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer",
+                password: "S@meer1234",
+            };
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+            // Assert
+            const userRespository = connection.getRepository(User);
+            const user = await userRespository.find();
+
+            expect(response.statusCode).toBe(400);
+            expect(user).toHaveLength(0);
+        });
+    });
 });
