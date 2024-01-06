@@ -1,10 +1,12 @@
 import request from "supertest";
+import { DataSource } from "typeorm";
+
 import app from "../../src/app";
 import { User } from "../../src/entity/User.entity";
-import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
-import { RegisterResponse } from "../../src/types/index.types";
+import { Headers, RegisterResponse } from "../../src/types/index.types";
 import { Roles } from "../../src/contants/index.constant";
+import { isJwt } from "../../src/utils/index.utlis";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -155,6 +157,74 @@ describe("Post /auth/register", () => {
 
             expect(response.statusCode).toBe(400);
             expect(user).toHaveLength(1);
+        });
+
+        it("should return the refresh token and access token inside a cookie", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "S@meer1234",
+            };
+
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            let accessToken = null;
+            let refreshToken = null;
+
+            const cookies =
+                (response.headers as unknown as Headers)["set-cookie"] || [];
+
+            cookies.forEach((cookie) => {
+                if (cookie.startsWith("accessToken=")) {
+                    accessToken = cookie.split(":")[0].split("=")[1];
+                }
+                if (cookie.startsWith("refreshToken=")) {
+                    refreshToken = cookie.split(":")[0].split("=")[1];
+                }
+            });
+
+            expect(accessToken).not.toBeNull();
+            expect(refreshToken).not.toBeNull();
+        });
+
+        it("should return true if jwt token is valid", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "S@meer1234",
+            };
+
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            let accessToken = null;
+            let refreshToken = null;
+
+            const cookies =
+                (response.headers as unknown as Headers)["set-cookie"] || [];
+
+            cookies.forEach((cookie) => {
+                if (cookie.startsWith("accessToken=")) {
+                    accessToken = cookie.split(":")[0].split("=")[1];
+                }
+                if (cookie.startsWith("refreshToken=")) {
+                    refreshToken = cookie.split(":")[0].split("=")[1];
+                }
+            });
+
+            expect(isJwt(accessToken)).toBeTruthy();
+            expect(isJwt(refreshToken)).toBeTruthy();
         });
     });
 

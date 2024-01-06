@@ -1,9 +1,10 @@
 import { Repository } from "typeorm";
+import bcrypt from "bcrypt";
+import createHttpError from "http-errors";
+
 import { User } from "../entity/User.entity";
 import { UserData } from "../types/index.types";
-import createHttpError from "http-errors";
 import { Roles } from "../contants/index.constant";
-import bcrypt from "bcrypt";
 
 export class UserService {
     constructor(private userRespository: Repository<User>) {}

@@ -14,3 +14,7 @@ export interface RegisterUserRequest extends Request {
 export interface RegisterResponse {
     id: string;
 }
+
+export interface Headers {
+    ["set-cookie"]: string[];
+}
