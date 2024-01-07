@@ -2,12 +2,13 @@ import request from "supertest";
 import { DataSource } from "typeorm";
 
 import app from "../../src/app";
-import { User } from "../../src/entity/User.entity";
-import { RefreshToken } from "../../src/entity/RefreshToken.entity";
 import { AppDataSource } from "../../src/config/data-source";
-import { Headers, RegisterResponse } from "../../src/types/index.types";
+import { Headers } from "../../src/types/index.types";
 import { Roles } from "../../src/contants/index.constant";
 import { isJwt } from "../../src/utils/index.utlis";
+
+import { User } from "../../src/entity/User.entity";
+import { RefreshToken } from "../../src/entity/RefreshToken.entity";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -97,7 +98,7 @@ describe("Post /auth/register", () => {
                 .send(userData);
 
             // Assert
-            expect((response.body as RegisterResponse).id).toBeDefined();
+            expect((response.body as Record<string, string>).id).toBeDefined();
         });
 
         it("should user have customer role", async () => {
@@ -228,7 +229,7 @@ describe("Post /auth/register", () => {
             expect(isJwt(refreshToken)).toBeTruthy();
         });
 
-        it("should presist the refresh token in the database ", async () => {
+        it("should presist the refresh token in the database", async () => {
             // Arange
             const userData = {
                 firstName: "Sameer",
@@ -535,7 +536,7 @@ describe("Post /auth/register", () => {
         });
     });
 
-    describe("format of error received from express validator", () => {
+    describe("error format received from express validator", () => {
         it("should return an array of errors", async () => {
             // Arange
             const userData = {

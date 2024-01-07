@@ -11,7 +11,9 @@ import logger from "../config/logger";
 import { User } from "../entity/User.entity";
 import { RefreshToken } from "../entity/RefreshToken.entity";
 
-import { registerValidation } from "../validators/auth.validator";
+import { registerValidation } from "../validators/register.validator";
+import { loginValidation } from "../validators/login.validator";
+import { CredentialService } from "./../services/Credential.Service";
 
 const router = exprees.Router();
 
@@ -20,7 +22,13 @@ const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
 
 const tokenService = new TokenService(refreshTokenRepository);
 const userService = new UserService(userRespository);
-const authController = new AuthController(userService, tokenService, logger);
+const credentialService = new CredentialService();
+const authController = new AuthController(
+    userService,
+    credentialService,
+    tokenService,
+    logger,
+);
 
 router
     .route("/register")
@@ -28,6 +36,12 @@ router
         registerValidation,
         (req: Request, res: Response, next: NextFunction) =>
             authController.register(req, res, next),
+    );
+
+router
+    .route("/login")
+    .post(loginValidation, (req: Request, res: Response, next: NextFunction) =>
+        authController.login(req, res, next),
     );
 
 export default router;

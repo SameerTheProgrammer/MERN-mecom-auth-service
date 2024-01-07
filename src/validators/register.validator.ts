@@ -28,7 +28,9 @@ export const registerValidation = checkSchema({
     email: {
         errorMessage: "Invalid Email",
         trim: true,
-        notEmpty: true,
+        notEmpty: {
+            errorMessage: "Email is required",
+        },
         isEmail: true,
     },
     password: {
