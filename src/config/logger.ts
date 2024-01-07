@@ -4,7 +4,10 @@ import { Config } from "./config";
 
 const logger = winston.createLogger({
     level: "info",
-    format: winston.format.json(),
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json(),
+    ),
     defaultMeta: { service: "auth-service" },
     transports: [
         new winston.transports.File({
