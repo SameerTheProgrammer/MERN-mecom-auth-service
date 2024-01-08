@@ -67,17 +67,16 @@ export class AuthController {
             // generate jwt token
             const accessToken = this.tokenService.generateAccessToken(payload);
             const newRefreshToken =
-                await this.tokenService.persistsRefreshToken(user);
+                await this.tokenService.persistRefreshToken(user);
 
             const refreshToken = this.tokenService.generateRefreshToken({
                 ...payload,
-                id: newRefreshToken,
+                id: String(newRefreshToken.id),
             });
-
+            // console.log(refreshToken)
             // Saving access token in cookie
             res.cookie("accessToken", accessToken, {
                 httpOnly: true,
-                secure: true,
                 domain: Config.COOKIE_DOMAIN,
                 sameSite: "strict",
                 maxAge:
@@ -87,7 +86,6 @@ export class AuthController {
             // Saving refresh token in cookie
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
-                secure: true,
                 domain: Config.COOKIE_DOMAIN,
                 sameSite: "strict",
                 maxAge:
@@ -97,6 +95,7 @@ export class AuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
+            // console.log("register contoller ", req.cookies);
 
             res.status(201).json({
                 id: user.id,
@@ -127,7 +126,7 @@ export class AuthController {
             });
 
             /* Create user in database using User.Service find method */
-            const user = await this.userService.findByEmail(email);
+            const user = await this.userService.findByEmailWithPassword(email);
 
             if (!user) {
                 const error = createHttpError(
@@ -159,18 +158,18 @@ export class AuthController {
 
             // generate jwt token
             const accessToken = this.tokenService.generateAccessToken(payload);
+
             const newRefreshToken =
-                await this.tokenService.persistsRefreshToken(user);
+                await this.tokenService.persistRefreshToken(user);
 
             const refreshToken = this.tokenService.generateRefreshToken({
                 ...payload,
-                id: newRefreshToken,
+                id: String(newRefreshToken.id),
             });
 
             // Saving access token in cookie
             res.cookie("accessToken", accessToken, {
                 httpOnly: true,
-                secure: true,
                 domain: Config.COOKIE_DOMAIN,
                 sameSite: "strict",
                 maxAge:
@@ -180,7 +179,6 @@ export class AuthController {
             // Saving refresh token in cookie
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
-                secure: true,
                 domain: Config.COOKIE_DOMAIN,
                 sameSite: "strict",
                 maxAge:
@@ -190,6 +188,8 @@ export class AuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
+            // console.log("contoller ", req.cookies);
+            this.logger.info("User has been logged in", { id: user.id });
 
             res.status(200).json({
                 id: user.id,
@@ -200,7 +200,69 @@ export class AuthController {
     }
 
     async self(req: AuthRequest, res: Response) {
-        const user = await this.userService.findById(req.auth.sub);
+        const user = await this.userService.findById(Number(req.auth.sub));
         res.status(200).json({ ...user, password: undefined });
+    }
+
+    async newAccessToken(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            // Generate RS256 and HS256 JWT token
+            const payload: JwtPayload = {
+                sub: String(req.auth.sub),
+                role: req.auth.role,
+            };
+            const accessToken = this.tokenService.generateAccessToken(payload);
+
+            const user = await this.userService.findById(Number(req.auth.sub));
+
+            if (!user) {
+                const err = createHttpError(
+                    400,
+                    "User with the token could not find",
+                );
+                return next(err);
+            }
+
+            // Persist the refresh token
+            const newRefreshToken =
+                await this.tokenService.persistRefreshToken(user);
+
+            // Delete old refresh token
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+            const refreshToken = this.tokenService.generateRefreshToken({
+                ...payload,
+                id: String(newRefreshToken.id),
+            });
+
+            // Saving access token in cookie
+            res.cookie("accessToken", accessToken, {
+                httpOnly: true,
+                domain: Config.COOKIE_DOMAIN,
+                sameSite: "strict",
+                maxAge:
+                    1000 * 60 * 60 * Number(Config.ACCESS_COOKIE_MAXAGE_HOUR),
+            });
+
+            // Saving refresh token in cookie
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                domain: Config.COOKIE_DOMAIN,
+                sameSite: "strict",
+                maxAge:
+                    1000 *
+                    60 *
+                    60 *
+                    24 *
+                    Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
+            });
+
+            this.logger.info("New access token has been created", {
+                id: user.id,
+            });
+            res.json({ id: user.id });
+        } catch (error) {
+            return next(error);
+        }
     }
 }

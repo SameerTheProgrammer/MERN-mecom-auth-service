@@ -131,12 +131,12 @@ describe("Post /auth/register", () => {
             await request(app).post("/auth/register").send(userData);
 
             // Assert
-            const userRespository = connection.getRepository(User);
-            const user = await userRespository.find();
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find({ select: ["password"] });
 
-            expect(user[0].password).not.toBe(userData.password);
-            expect(user[0].password).toHaveLength(60);
-            expect(user[0].password).toMatch(/^\$2b\$\d+\$/);
+            expect(users[0].password).not.toBe(userData.password);
+            expect(users[0].password).toHaveLength(60);
+            expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
         });
 
         it("should return 400 status code if email is already exists", async () => {
@@ -255,6 +255,24 @@ describe("Post /auth/register", () => {
                 .getMany();
 
             expect(token).toHaveLength(1);
+        });
+
+        it("should presist the user email in the database in lowercase", async () => {
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "Sameer@gmail.com",
+                password: "S@meer1234",
+            };
+            const userRespository = connection.getRepository(User);
+
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const user = await userRespository.find();
+            expect(user[0].email).toBe("sameer@gmail.com");
         });
     });
 

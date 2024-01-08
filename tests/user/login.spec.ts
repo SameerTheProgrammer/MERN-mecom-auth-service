@@ -99,13 +99,42 @@ describe("POST /auth/login", () => {
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
+            const data = userRepository.create({
                 firstName: "Sameer",
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
                 role: Roles.Customer,
             });
+            await userRepository.save(data);
+
+            const response = await request(app)
+                .post("/auth/login")
+                .send(loginUserData);
+            // Asserts
+            expect((response.body as Record<string, string>).id).toBeDefined();
+        });
+
+        it("should return id of logged user when user enter uppercase email", async () => {
+            // Arange
+            const loginUserData = {
+                email: "Sameer@gmail.com",
+                password: "$@meer1234",
+            };
+
+            // Act
+            const userRepository = connection.getRepository(User);
+            // converting normal password to hashed password
+            const hashedPassword = await hashPassword("$@meer1234");
+
+            const data = userRepository.create({
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: hashedPassword,
+                role: Roles.Customer,
+            });
+            await userRepository.save(data);
 
             const response = await request(app)
                 .post("/auth/login")

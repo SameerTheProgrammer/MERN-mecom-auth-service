@@ -7,11 +7,11 @@ import { UserData } from "../types/index.types";
 import { Roles } from "../contants/index.constant";
 
 export class UserService {
-    constructor(private userRespository: Repository<User>) {}
+    constructor(private userRepository: Repository<User>) {}
 
     async create({ firstName, lastName, email, password }: UserData) {
         // check is email is already registered or not
-        const user = await this.userRespository.findOne({ where: { email } });
+        const user = await this.userRepository.findOne({ where: { email } });
         if (user) {
             const error = createHttpError(400, "Email already exists");
             throw error;
@@ -22,13 +22,14 @@ export class UserService {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         try {
-            return await this.userRespository.save({
+            const data = this.userRepository.create({
                 firstName,
                 lastName,
                 email,
                 password: hashedPassword,
                 role: Roles.Customer,
             });
+            return await this.userRepository.save(data);
         } catch (error) {
             const err = createHttpError(
                 500,
@@ -39,15 +40,31 @@ export class UserService {
     }
 
     async findByEmail(email: string) {
-        return await this.userRespository.findOne({
+        return await this.userRepository.findOne({
             where: {
-                email,
+                email: email.toLowerCase(),
             },
         });
     }
 
+    async findByEmailWithPassword(email: string) {
+        return await this.userRepository.findOne({
+            where: {
+                email: email.toLowerCase(),
+            },
+            select: [
+                "id",
+                "firstName",
+                "lastName",
+                "email",
+                "password",
+                "role",
+            ],
+        });
+    }
+
     async findById(id: number) {
-        return await this.userRespository.findOne({
+        return await this.userRepository.findOne({
             where: {
                 id,
             },
