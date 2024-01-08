@@ -17,6 +17,7 @@ import { CredentialService } from "./../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
 import { AuthRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/validateRefreshToken.middleware";
+import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 
 const router = exprees.Router();
 
@@ -59,6 +60,15 @@ router
         validateRefreshTokenMiddleware,
         (req: Request, res: Response, next: NextFunction) =>
             authController.newAccessToken(req as AuthRequest, res, next),
+    );
+
+router
+    .route("/logout")
+    .post(
+        authenticateMiddleware,
+        parseRefreshTokenMiddleware,
+        (req: Request, res: Response, next: NextFunction) =>
+            authController.logout(req as AuthRequest, res, next),
     );
 
 export default router;
