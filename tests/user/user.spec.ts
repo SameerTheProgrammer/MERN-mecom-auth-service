@@ -135,5 +135,37 @@ describe("Get /auth/self", () => {
                 "password",
             );
         });
+
+        it("should return 401 status code if token does not exits", async () => {
+            /* steps:-
+                Register user
+                Generate token
+                add token to cookie
+                check if user id matches with registered user
+            */
+
+            // Arange
+            const userData = {
+                firstName: "Sameer",
+                lastName: "Kumar",
+                email: "sameer@gmail.com",
+                password: "$@meer1234",
+            };
+            // Act
+            /* Register user */
+
+            const hashedPassword = await hashPassword(userData.password);
+            const userRepository = connection.getRepository(User);
+            await userRepository.save({
+                ...userData,
+                password: hashedPassword,
+                role: Roles.Customer,
+            });
+
+            const response = await request(app).get("/auth/self").send();
+
+            // Assert
+            expect(response.statusCode).toBe(401);
+        });
     });
 });
