@@ -42,7 +42,7 @@ export class AuthController {
 
             const { firstName, lastName, email, password } = req.body;
 
-            this.logger.debug("New request to register a user", {
+            this.logger.info("New request to register a user", {
                 firstName,
                 lastName,
                 email,
@@ -121,7 +121,7 @@ export class AuthController {
 
             const { email, password } = req.body;
 
-            this.logger.debug("New request to login a user", {
+            this.logger.info("New request to login a user", {
                 email,
                 password: "*****",
             });
