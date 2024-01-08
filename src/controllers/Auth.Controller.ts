@@ -4,7 +4,11 @@ import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import createHttpError from "http-errors";
 
-import { RegisterUserRequest } from "../types/index.types";
+import {
+    AuthRequest,
+    LoginUserRequest,
+    RegisterUserRequest,
+} from "../types/index.types";
 import { Config } from "../config/config";
 
 import { UserService } from "../services/User.Service";
@@ -102,7 +106,7 @@ export class AuthController {
         }
     }
 
-    async login(req: RegisterUserRequest, res: Response, next: NextFunction) {
+    async login(req: LoginUserRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);
@@ -124,6 +128,7 @@ export class AuthController {
 
             /* Create user in database using User.Service find method */
             const user = await this.userService.findByEmail(email);
+
             if (!user) {
                 const error = createHttpError(
                     400,
@@ -192,5 +197,10 @@ export class AuthController {
         } catch (error) {
             return next(error);
         }
+    }
+
+    async self(req: AuthRequest, res: Response) {
+        const user = await this.userService.findById(req.auth.sub);
+        res.status(200).json({ ...user, password: undefined });
     }
 }

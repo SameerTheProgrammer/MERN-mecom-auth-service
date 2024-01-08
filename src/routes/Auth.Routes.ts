@@ -14,6 +14,8 @@ import { RefreshToken } from "../entity/RefreshToken.entity";
 import { registerValidation } from "../validators/register.validator";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "./../services/Credential.Service";
+import authenticateMiddleware from "../middleware/authenticate.middleware";
+import { AuthRequest } from "../types/index.types";
 
 const router = exprees.Router();
 
@@ -42,6 +44,12 @@ router
     .route("/login")
     .post(loginValidation, (req: Request, res: Response, next: NextFunction) =>
         authController.login(req, res, next),
+    );
+
+router
+    .route("/self")
+    .get(authenticateMiddleware, (req: Request, res: Response) =>
+        authController.self(req as AuthRequest, res),
     );
 
 export default router;

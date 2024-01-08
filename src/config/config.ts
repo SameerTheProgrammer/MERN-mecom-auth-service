@@ -21,6 +21,8 @@ const {
     ACCESS_COOKIE_MAXAGE_HOUR,
     REFRESH_COOKIE_MAXAGE_DAYS,
     COOKIE_DOMAIN,
+
+    JWKS_URI,
 } = process.env;
 
 export const Config = {
@@ -41,4 +43,6 @@ export const Config = {
     ACCESS_COOKIE_MAXAGE_HOUR,
     REFRESH_COOKIE_MAXAGE_DAYS,
     COOKIE_DOMAIN,
+
+    JWKS_URI,
 };
