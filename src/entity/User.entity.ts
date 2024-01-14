@@ -5,6 +5,7 @@ import {
     Entity,
     PrimaryGeneratedColumn,
 } from "typeorm";
+import { Roles } from "../types/entity.type";
 
 @Entity({ name: "users" })
 export class User {
@@ -23,8 +24,8 @@ export class User {
     @Column({ select: false })
     password: string;
 
-    @Column()
-    role: string;
+    @Column({ type: "enum", enum: Roles, default: Roles.CUSTOMER })
+    role: Roles;
 
     @BeforeInsert()
     @BeforeUpdate()

@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { User } from "../entity/User.entity";
 import { Config } from "./config";
 import { RefreshToken } from "../entity/RefreshToken.entity";
+import { Seller } from "../entity/Seller.entity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
     // Dont't use this in production. Always keep false
     synchronize: false,
     logging: false,
-    entities: [User, RefreshToken],
+    entities: [User, RefreshToken, Seller],
     migrations: ["src/migration/*.ts"],
     subscribers: [],
 });

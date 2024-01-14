@@ -4,7 +4,7 @@ import createHttpError from "http-errors";
 
 import { User } from "../entity/User.entity";
 import { UserData } from "../types/index.types";
-import { Roles } from "../contants/index.constant";
+import { Roles } from "../types/entity.type";
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
@@ -27,7 +27,7 @@ export class UserService {
                 lastName,
                 email,
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
             return await this.userRepository.save(data);
         } catch (error) {

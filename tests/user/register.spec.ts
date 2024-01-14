@@ -4,11 +4,11 @@ import { DataSource } from "typeorm";
 import app from "../../src/app";
 import { AppDataSource } from "../../src/config/data-source";
 import { Headers } from "../../src/types/index.types";
-import { Roles } from "../../src/contants/index.constant";
 import { isJwt } from "../../src/utils/index.utlis";
 
 import { User } from "../../src/entity/User.entity";
 import { RefreshToken } from "../../src/entity/RefreshToken.entity";
+import { Roles } from "../../src/types/entity.type";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;
@@ -116,7 +116,7 @@ describe("Post /auth/register", () => {
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
 
-            expect(user[0].role).toBe(Roles.Customer);
+            expect(user[0].role).toBe(Roles.CUSTOMER);
         });
 
         it("should store hashed password in the database", async () => {
@@ -148,7 +148,7 @@ describe("Post /auth/register", () => {
                 password: "S@meer1234",
             };
             const userRespository = connection.getRepository(User);
-            await userRespository.save({ ...userData, role: Roles.Customer });
+            await userRespository.save({ ...userData, role: Roles.CUSTOMER });
             // Act
             const response = await request(app)
                 .post("/auth/register")

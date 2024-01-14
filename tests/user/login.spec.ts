@@ -4,13 +4,13 @@ import request from "supertest";
 import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { Headers } from "../../src/types/index.types";
-import { Roles } from "../../src/contants/index.constant";
 
 import { User } from "../../src/entity/User.entity";
 import { RefreshToken } from "../../src/entity/RefreshToken.entity";
 
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
 import { isJwt } from "../../src/utils/index.utlis";
+import { Roles } from "../../src/types/entity.type";
 
 describe("POST /auth/login", () => {
     let connection: DataSource;
@@ -46,7 +46,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -74,7 +74,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -104,7 +104,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
             await userRepository.save(data);
 
@@ -132,7 +132,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
             await userRepository.save(data);
 
@@ -161,7 +161,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -189,7 +189,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -217,7 +217,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -260,7 +260,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -303,7 +303,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -343,7 +343,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -371,7 +371,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -401,7 +401,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -429,7 +429,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
@@ -458,7 +458,7 @@ describe("POST /auth/login", () => {
                 lastName: "Kumar",
                 email: "sameer@gmail.com",
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app)
