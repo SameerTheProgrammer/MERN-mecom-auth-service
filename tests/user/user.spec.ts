@@ -4,8 +4,8 @@ import createJWKSMock from "mock-jwks";
 import { AppDataSource } from "../../src/config/data-source";
 import { DataSource } from "typeorm";
 import { User } from "../../src/entity/User.entity";
-import { Roles } from "../../src/contants/index.constant";
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
+import { Roles } from "../../src/types/entity.type";
 
 describe("Get /auth/self", () => {
     let connection: DataSource;
@@ -35,7 +35,7 @@ describe("Get /auth/self", () => {
             // Arange
             const accessToken = jwks.token({
                 sub: "1",
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             // Act
@@ -71,7 +71,7 @@ describe("Get /auth/self", () => {
             const user = await userRepository.save({
                 ...userData,
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             /* Generate token */
@@ -114,7 +114,7 @@ describe("Get /auth/self", () => {
             const user = await userRepository.save({
                 ...userData,
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             /* Generate token */
@@ -159,7 +159,7 @@ describe("Get /auth/self", () => {
             await userRepository.save({
                 ...userData,
                 password: hashedPassword,
-                role: Roles.Customer,
+                role: Roles.CUSTOMER,
             });
 
             const response = await request(app).get("/auth/self").send();
