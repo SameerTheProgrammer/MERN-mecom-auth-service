@@ -13,7 +13,7 @@ export class Seller {
     id: number;
 
     @Column("varchar", { length: 255 })
-    sellerName: string;
+    name: string;
 
     @Column("varchar", { length: 255, unique: false })
     email: string;
