@@ -13,7 +13,7 @@ import { RefreshToken } from "../entity/RefreshToken.entity";
 
 import { registerValidation } from "../validators/register.validator";
 import { loginValidation } from "../validators/login.validator";
-import { CredentialService } from "./../services/Credential.Service";
+import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
 import { AuthRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/validateRefreshToken.middleware";

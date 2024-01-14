@@ -4,7 +4,7 @@ import { HttpError } from "http-errors";
 import cookieParser from "cookie-parser";
 
 import logger from "./config/logger";
-import authRouter from "./routes/Auth.Routes";
+import authRouter from "./routes/auth.Routes";
 
 const app = express();
 app.use(express.static("public"));
