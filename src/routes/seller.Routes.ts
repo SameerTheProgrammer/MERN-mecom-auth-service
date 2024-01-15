@@ -25,4 +25,19 @@ router
             sellerController.create(req, res, next),
     );
 
+router
+    .route("/")
+    .get(
+        authenticateMiddleware,
+        canAccess([Roles.ADMIN]),
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerController.getAll(req, res, next),
+    );
+
+router
+    .route("/:id")
+    .get((req: Request, res: Response, next: NextFunction) =>
+        sellerController.getById(req, res, next),
+    );
+
 export default router;
