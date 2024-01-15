@@ -45,3 +45,16 @@ export type AuthCookie = {
 export interface IRefreshTokenPayload extends Jwt {
     id: string;
 }
+
+export interface ISellerData {
+    name: string;
+    email: string;
+    password: string;
+    phoneNumber: number;
+    address: string;
+    zipCode: number;
+}
+
+export interface ICreateSellerRequest extends Request {
+    body: ISellerData;
+}
