@@ -5,7 +5,7 @@ import { AppDataSource } from "../../src/config/data-source";
 import { DataSource } from "typeorm";
 import { User } from "../../src/entity/User.entity";
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
-import { Roles } from "../../src/types/entity.type";
+import { Roles } from "../../src/contants/index.constant";
 
 describe("Get /auth/self", () => {
     let connection: DataSource;

@@ -8,7 +8,7 @@ import { isJwt } from "../../src/utils/index.utlis";
 
 import { User } from "../../src/entity/User.entity";
 import { RefreshToken } from "../../src/entity/RefreshToken.entity";
-import { Roles } from "../../src/types/entity.type";
+import { Roles } from "../../src/contants/index.constant";
 
 describe("Post /auth/register", () => {
     let connection: DataSource;

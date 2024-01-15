@@ -5,7 +5,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { Avatar, Roles } from "../types/entity.type";
 
 @Entity({ name: "sellers" })
 export class Seller {
@@ -15,7 +14,7 @@ export class Seller {
     @Column("varchar", { length: 255 })
     name: string;
 
-    @Column("varchar", { length: 255, unique: false })
+    @Column("varchar", { length: 255, unique: true })
     email: string;
 
     @Column("varchar", { length: 255, select: false })
@@ -30,11 +29,14 @@ export class Seller {
     @Column({ type: "int" })
     phoneNumber: number;
 
-    @Column({ type: "enum", enum: Roles, default: Roles.SELLER })
-    role: Roles;
+    @Column({ type: "varchar", default: "seller" })
+    role: string;
 
-    @Column({ type: "jsonb" })
-    avatar: Avatar;
+    @Column({ type: "jsonb", nullable: true })
+    avatar: {
+        public_id: string;
+        url: string;
+    };
 
     @Column({ type: "int" })
     zipCode: number;

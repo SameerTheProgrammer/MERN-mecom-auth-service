@@ -10,7 +10,7 @@ import { RefreshToken } from "../../src/entity/RefreshToken.entity";
 
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
 import { isJwt } from "../../src/utils/index.utlis";
-import { Roles } from "../../src/types/entity.type";
+import { Roles } from "../../src/contants/index.constant";
 
 describe("POST /auth/login", () => {
     let connection: DataSource;
