@@ -1,14 +1,10 @@
 import { Request } from "express";
 import { Jwt } from "jsonwebtoken";
 
+// register user
 export interface UserData {
     firstName: string;
     lastName: string;
-    email: string;
-    password: string;
-}
-
-export interface LoginUserData {
     email: string;
     password: string;
 }
@@ -17,24 +13,23 @@ export interface RegisterUserRequest extends Request {
     body: UserData;
 }
 
-export interface LoginUserRequest extends Request {
-    body: LoginUserData;
-}
-
 export interface RegisterResponse {
     id: string;
 }
 
-export interface Headers {
-    ["set-cookie"]: string[];
+// login user
+export interface LoginUserData {
+    email: string;
+    password: string;
 }
 
-export interface AuthRequest extends Request {
-    auth: {
-        sub: string;
-        role: string;
-        id?: string;
-    };
+export interface LoginUserRequest extends Request {
+    body: LoginUserData;
+}
+
+// cookies
+export interface Headers {
+    ["set-cookie"]: string[];
 }
 
 export type AuthCookie = {
@@ -46,6 +41,16 @@ export interface IRefreshTokenPayload extends Jwt {
     id: string;
 }
 
+// authentication middleware
+export interface AuthRequest extends Request {
+    auth: {
+        sub: string;
+        role: string;
+        id?: string;
+    };
+}
+
+// seller create
 export interface ISellerData {
     name: string;
     email: string;

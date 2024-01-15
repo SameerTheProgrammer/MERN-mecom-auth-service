@@ -5,6 +5,8 @@ import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import logger from "../config/logger";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
+import { canAccess } from "../middlewares/canAccess.middleware";
+import { Roles } from "../contants/index.constant";
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ const sellerController = new SellerController(sellerService, logger);
 
 router
     .route("/")
-    .post(authenticateMiddleware, (req, res, next) =>
+    .post(authenticateMiddleware, canAccess([Roles.ADMIN]), (req, res, next) =>
         sellerController.create(req, res, next),
     );
 

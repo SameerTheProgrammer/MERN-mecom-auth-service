@@ -113,6 +113,35 @@ describe("Post /sellers", () => {
             expect(response.statusCode).toBe(401);
             expect(seller).toHaveLength(0);
         });
+
+        it("should return 403 if user is not admin ", async () => {
+            // Arange
+            const accessToken = jwks.token({
+                sub: "1",
+                role: Roles.SELLER,
+            });
+            const sellerData = {
+                name: "shopName",
+                email: "shop@gmail.com",
+                password: "$hopCentre123",
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
+            };
+
+            // Act
+            const response = await request(app)
+                .post("/sellers")
+                .set("Cookie", [`accessToken=${accessToken};`])
+                .send(sellerData);
+
+            // Assert
+            const sellerRepository = connection.getRepository(Seller);
+            const seller = await sellerRepository.find();
+
+            expect(response.statusCode).toBe(403);
+            expect(seller).toHaveLength(0);
+        });
     });
 
     describe("fields are missing", () => {});
