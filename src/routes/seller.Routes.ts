@@ -4,6 +4,7 @@ import { SellerService } from "../services/Seller.Service";
 import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import logger from "../config/logger";
+import authenticateMiddleware from "../middlewares/authenticate.middleware";
 
 const router = express.Router();
 
@@ -13,6 +14,8 @@ const sellerController = new SellerController(sellerService, logger);
 
 router
     .route("/")
-    .post((req, res, next) => sellerController.create(req, res, next));
+    .post(authenticateMiddleware, (req, res, next) =>
+        sellerController.create(req, res, next),
+    );
 
 export default router;

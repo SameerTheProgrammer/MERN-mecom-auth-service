@@ -4,17 +4,25 @@ import request from "supertest";
 import app from "../../src/app";
 import { Seller } from "../../src/entity/Seller.entity";
 import { Roles } from "../../src/contants/index.constant";
+import createJWKSMock from "mock-jwks";
 
 describe("Post /sellers", () => {
     let connection: DataSource;
+    let jwks: ReturnType<typeof createJWKSMock>;
 
     beforeAll(async () => {
+        jwks = createJWKSMock("http://localhost:5501");
         connection = await AppDataSource.initialize();
     });
 
     beforeEach(async () => {
+        jwks.start();
         await connection.dropDatabase();
         await connection.synchronize();
+    });
+
+    afterEach(() => {
+        jwks.stop();
     });
 
     afterAll(async () => {
@@ -25,6 +33,11 @@ describe("Post /sellers", () => {
     describe("Given all field", () => {
         it("should return a 201 status code ", async () => {
             // Arange
+            const accessToken = jwks.token({
+                sub: "1",
+                role: Roles.ADMIN,
+            });
+
             const sellerData = {
                 name: "shopName",
                 email: "shop@gmail.com",
@@ -32,12 +45,12 @@ describe("Post /sellers", () => {
                 phoneNumber: 1234567890,
                 address: "Jharkhand, India",
                 zipCode: 825555,
-                // role:Roles.SELLER
             };
 
             // Act
             const response = await request(app)
                 .post("/sellers")
+                .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
             // Assert
             expect(response.statusCode).toBe(201);
@@ -45,6 +58,11 @@ describe("Post /sellers", () => {
 
         it("should create a seller in the database", async () => {
             // Arange
+            const accessToken = jwks.token({
+                sub: "1",
+                role: Roles.ADMIN,
+            });
+
             const sellerData = {
                 name: "shopName",
                 email: "shop@gmail.com",
@@ -52,11 +70,13 @@ describe("Post /sellers", () => {
                 phoneNumber: 1234567890,
                 address: "Jharkhand, India",
                 zipCode: 825555,
-                // role:Roles.SELLER
             };
 
             // Act
-            await request(app).post("/sellers").send(sellerData);
+            await request(app)
+                .post("/sellers")
+                .set("Cookie", [`accessToken=${accessToken};`])
+                .send(sellerData);
 
             // Assert
             const sellerRepository = connection.getRepository(Seller);
@@ -69,6 +89,29 @@ describe("Post /sellers", () => {
             expect(seller[0].address).toBe(sellerData.address);
             expect(seller[0].zipCode).toBe(sellerData.zipCode);
             expect(seller[0].role).toBe(Roles.SELLER);
+        });
+
+        it("should return 401 if user is not authenticated ", async () => {
+            // Arange
+            const sellerData = {
+                name: "shopName",
+                email: "shop@gmail.com",
+                password: "$hopCentre123",
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
+            };
+
+            // Act
+            const response = await request(app)
+                .post("/sellers")
+                .send(sellerData);
+            // Assert
+            const sellerRepository = connection.getRepository(Seller);
+            const seller = await sellerRepository.find();
+
+            expect(response.statusCode).toBe(401);
+            expect(seller).toHaveLength(0);
         });
     });
 
