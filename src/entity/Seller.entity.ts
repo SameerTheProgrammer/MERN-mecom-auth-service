@@ -29,6 +29,12 @@ export class Seller {
     @Column({ type: "int" })
     phoneNumber: number;
 
+    // @Column({ type: "jsonb" })
+    // Number: {
+    //     countryCode:string,
+    //     nationalNumber: string
+    // };
+
     @Column({ type: "varchar", default: "seller" })
     role: string;
 

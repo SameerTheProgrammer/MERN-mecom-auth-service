@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { SellerController } from "./../controllers/Seller.Controller";
 import { SellerService } from "../services/Seller.Service";
 import { AppDataSource } from "../config/data-source";
@@ -7,6 +7,7 @@ import logger from "../config/logger";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
 import { canAccess } from "../middlewares/canAccess.middleware";
 import { Roles } from "../contants/index.constant";
+import { createSellerValidation } from "../validators/createSeller.validator";
 
 const router = express.Router();
 
@@ -16,8 +17,12 @@ const sellerController = new SellerController(sellerService, logger);
 
 router
     .route("/")
-    .post(authenticateMiddleware, canAccess([Roles.ADMIN]), (req, res, next) =>
-        sellerController.create(req, res, next),
+    .post(
+        authenticateMiddleware,
+        canAccess([Roles.ADMIN]),
+        createSellerValidation,
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerController.create(req, res, next),
     );
 
 export default router;
