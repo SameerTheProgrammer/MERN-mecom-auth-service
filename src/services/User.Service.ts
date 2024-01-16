@@ -63,11 +63,31 @@ export class UserService {
         });
     }
 
-    async findById(id: number) {
-        return await this.userRepository.findOne({
-            where: {
-                id,
-            },
-        });
+    async getAll() {
+        try {
+            return this.userRepository.find();
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Failed to fetch all seller infomation from database",
+            );
+            throw err;
+        }
+    }
+
+    async findById(customerId: number) {
+        try {
+            return this.userRepository.findOne({
+                where: {
+                    id: customerId,
+                },
+            });
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Failed to fetch all seller infomation from database",
+            );
+            throw err;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
@@ -280,6 +280,32 @@ export class UserAuthController {
         } catch (err) {
             next(err);
             return;
+        }
+    }
+
+    async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const sellers = await this.userService.getAll();
+            this.logger.info("All seller have been fetched");
+            res.json(sellers);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const customerId = req.params.id;
+            if (isNaN(Number(customerId))) {
+                next(createHttpError(400, "Invalid url param."));
+                return;
+            }
+            const seller = await this.userService.findById(Number(customerId));
+
+            this.logger.info("Seller have been fetched");
+            res.json(seller);
+        } catch (error) {
+            next(error);
         }
     }
 }

@@ -18,6 +18,7 @@ import authenticateMiddleware from "../middlewares/authenticate.middleware";
 import { AuthRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
+import { canAccess } from "../middlewares/canAccess.middleware";
 
 const router = exprees.Router();
 
@@ -69,6 +70,23 @@ router
         parseRefreshTokenMiddleware,
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.logout(req as AuthRequest, res, next),
+    );
+
+router
+    .route("/get/:id")
+    .post(
+        authenticateMiddleware,
+        (req: Request, res: Response, next: NextFunction) =>
+            userAuthController.getById(req as AuthRequest, res, next),
+    );
+
+router
+    .route("/getAll")
+    .post(
+        authenticateMiddleware,
+        canAccess,
+        (req: Request, res: Response, next: NextFunction) =>
+            userAuthController.getAll(req as AuthRequest, res, next),
     );
 
 export default router;
