@@ -7,10 +7,10 @@ import { Headers } from "../../src/types/index.types";
 import { isJwt } from "../../src/utils/index.utlis";
 
 import { User } from "../../src/entity/User.entity";
-import { RefreshToken } from "../../src/entity/RefreshToken.entity";
+import { UserRefreshToken } from "../../src/entity/User.RefreshToken.entity";
 import { Roles } from "../../src/contants/index.constant";
 
-describe("Post /auth/register", () => {
+describe("Post /api/v1/auth/user/register", () => {
     let connection: DataSource;
 
     beforeAll(async () => {
@@ -38,7 +38,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -55,7 +55,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -73,7 +73,9 @@ describe("Post /auth/register", () => {
                 password: "S@meer1234",
             };
             // Act
-            await request(app).post("/auth/register").send(userData);
+            await request(app)
+                .post("/api/v1/auth/user/register")
+                .send(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -94,7 +96,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -110,7 +112,9 @@ describe("Post /auth/register", () => {
                 password: "S@meer1234",
             };
             // Act
-            await request(app).post("/auth/register").send(userData);
+            await request(app)
+                .post("/api/v1/auth/user/register")
+                .send(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -128,7 +132,9 @@ describe("Post /auth/register", () => {
                 password: "S@meer1234",
             };
             // Act
-            await request(app).post("/auth/register").send(userData);
+            await request(app)
+                .post("/api/v1/auth/user/register")
+                .send(userData);
 
             // Assert
             const userRepository = connection.getRepository(User);
@@ -151,7 +157,7 @@ describe("Post /auth/register", () => {
             await userRespository.save({ ...userData, role: Roles.CUSTOMER });
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -172,7 +178,7 @@ describe("Post /auth/register", () => {
 
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -206,7 +212,7 @@ describe("Post /auth/register", () => {
 
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -240,12 +246,12 @@ describe("Post /auth/register", () => {
 
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
             const refreshTokenRespository =
-                connection.getRepository(RefreshToken);
+                connection.getRepository(UserRefreshToken);
 
             const token = await refreshTokenRespository
                 .createQueryBuilder("refreshToken")
@@ -268,7 +274,9 @@ describe("Post /auth/register", () => {
             const userRespository = connection.getRepository(User);
 
             // Act
-            await request(app).post("/auth/register").send(userData);
+            await request(app)
+                .post("/api/v1/auth/user/register")
+                .send(userData);
 
             // Assert
             const user = await userRespository.find();
@@ -288,7 +296,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
             // Assert
             const userRespository = connection.getRepository(User);
@@ -308,7 +316,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
             // Assert
             const userRespository = connection.getRepository(User);
@@ -328,7 +336,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
             // Assert
             const userRespository = connection.getRepository(User);
@@ -348,7 +356,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
             // Assert
             const userRespository = connection.getRepository(User);
@@ -369,7 +377,9 @@ describe("Post /auth/register", () => {
                 password: "   S@meer1234   ",
             };
             // Act
-            await request(app).post("/auth/register").send(userData);
+            await request(app)
+                .post("/api/v1/auth/user/register")
+                .send(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -395,7 +405,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -416,7 +426,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -437,7 +447,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -458,7 +468,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -479,7 +489,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -500,7 +510,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -521,7 +531,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -542,7 +552,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // Assert
@@ -565,7 +575,7 @@ describe("Post /auth/register", () => {
             };
             // Act
             const response = await request(app)
-                .post("/auth/register")
+                .post("/api/v1/auth/user/register")
                 .send(userData);
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

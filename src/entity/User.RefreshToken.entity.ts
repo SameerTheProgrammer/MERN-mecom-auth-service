@@ -9,8 +9,8 @@ import {
 
 import { User } from "./User.entity";
 
-@Entity({ name: "refreshTokens" })
-export class RefreshToken {
+@Entity({ name: "userRefreshTokens" })
+export class UserRefreshToken {
     @PrimaryGeneratedColumn()
     id: number;
 

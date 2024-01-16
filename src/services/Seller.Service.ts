@@ -20,6 +20,35 @@ export class SellerService {
         }
     }
 
+    async findByEmail(email: string) {
+        return await this.sellerRepository.findOne({
+            where: {
+                email: email.toLowerCase(),
+            },
+        });
+    }
+
+    async findByEmailWithPassword(email: string) {
+        return await this.sellerRepository.findOne({
+            where: {
+                email: email.toLowerCase(),
+            },
+            select: [
+                "id",
+                "name",
+                "email",
+                "phoneNumber",
+                "password",
+                "role",
+                "avatar",
+                "address",
+                "description",
+                "zipCode",
+                "avaiableBalance",
+            ],
+        });
+    }
+
     async getAll() {
         try {
             return this.sellerRepository.find();

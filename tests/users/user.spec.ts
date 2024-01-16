@@ -7,7 +7,7 @@ import { User } from "../../src/entity/User.entity";
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
 import { Roles } from "../../src/contants/index.constant";
 
-describe("Get /auth/self", () => {
+describe("Get /api/v1/auth/user/self", () => {
     let connection: DataSource;
     let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -40,7 +40,7 @@ describe("Get /auth/self", () => {
 
             // Act
             const response = await request(app)
-                .get("/auth/self")
+                .get("/api/v1/auth/user/self")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send();
 
@@ -82,7 +82,7 @@ describe("Get /auth/self", () => {
 
             /* add token to cookie */
             const response = await request(app)
-                .get("/auth/self")
+                .get("/api/v1/auth/user/self")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send();
 
@@ -125,7 +125,7 @@ describe("Get /auth/self", () => {
 
             /* add token to cookie */
             const response = await request(app)
-                .get("/auth/self")
+                .get("/api/v1/auth/user/self")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send();
 
@@ -162,7 +162,9 @@ describe("Get /auth/self", () => {
                 role: Roles.CUSTOMER,
             });
 
-            const response = await request(app).get("/auth/self").send();
+            const response = await request(app)
+                .get("/api/v1/auth/user/self")
+                .send();
 
             // Assert
             expect(response.statusCode).toBe(401);

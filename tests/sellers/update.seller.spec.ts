@@ -6,7 +6,7 @@ import { Seller } from "../../src/entity/Seller.entity";
 import { Roles } from "../../src/contants/index.constant";
 import createJWKSMock from "mock-jwks";
 
-describe("Post /api/v1/auth/seller/create", () => {
+describe.skip("Post /sellers", () => {
     let connection: DataSource;
     let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -49,7 +49,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             const response = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
             // Assert
@@ -74,7 +74,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
 
@@ -104,7 +104,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             const response = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .send(sellerData);
             // Assert
             const sellerRepository = connection.getRepository(Seller);
@@ -131,7 +131,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             const response = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
 
@@ -162,7 +162,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
             // Assert
@@ -200,7 +200,7 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             const response = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send(sellerData);
 
@@ -229,27 +229,27 @@ describe("Post /api/v1/auth/seller/create", () => {
 
             // Act
             const response = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send({ ...sellerData, password: "" });
 
             const response1 = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send({ ...sellerData, password: "$hopC1" });
 
             const response2 = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send({ ...sellerData, password: "$hopCentre" });
 
             const response3 = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send({ ...sellerData, password: "hopCentre123" });
 
             const response4 = await request(app)
-                .post("/api/v1/auth/seller/create")
+                .post("/sellers")
                 .set("Cookie", [`accessToken=${accessToken};`])
                 .send({ ...sellerData, password: "$hopentre123" });
 

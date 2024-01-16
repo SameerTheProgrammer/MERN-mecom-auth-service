@@ -6,13 +6,13 @@ import app from "../../src/app";
 import { Headers } from "../../src/types/index.types";
 
 import { User } from "../../src/entity/User.entity";
-import { RefreshToken } from "../../src/entity/RefreshToken.entity";
+import { UserRefreshToken } from "../../src/entity/User.RefreshToken.entity";
 
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
 import { isJwt } from "../../src/utils/index.utlis";
 import { Roles } from "../../src/contants/index.constant";
 
-describe("POST /auth/login", () => {
+describe("POST /api/v1/auth/user/login", () => {
     let connection: DataSource;
 
     beforeAll(async () => {
@@ -50,7 +50,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -78,7 +78,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -109,7 +109,7 @@ describe("POST /auth/login", () => {
             await userRepository.save(data);
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
             // Asserts
             expect((response.body as Record<string, string>).id).toBeDefined();
@@ -137,7 +137,7 @@ describe("POST /auth/login", () => {
             await userRepository.save(data);
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -165,7 +165,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -193,7 +193,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -221,7 +221,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -264,7 +264,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -307,12 +307,12 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
             const refreshTokenRespository =
-                connection.getRepository(RefreshToken);
+                connection.getRepository(UserRefreshToken);
 
             const token = await refreshTokenRespository
                 .createQueryBuilder("refreshToken")
@@ -347,7 +347,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -375,7 +375,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -405,7 +405,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             // Asserts
@@ -433,7 +433,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             expect(response.statusCode).toBe(400);
@@ -462,7 +462,7 @@ describe("POST /auth/login", () => {
             });
 
             const response = await request(app)
-                .post("/auth/login")
+                .post("/api/v1/auth/user/login")
                 .send(loginUserData);
 
             expect(response.body).toHaveProperty("errors");

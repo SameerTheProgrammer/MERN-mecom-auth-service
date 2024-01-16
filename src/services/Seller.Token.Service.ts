@@ -5,11 +5,13 @@ import { Repository } from "typeorm";
 import createHttpError from "http-errors";
 
 import { Config } from "../config/config";
-import { RefreshToken } from "../entity/RefreshToken.entity";
-import { User } from "../entity/User.entity";
+import { Seller } from "../entity/Seller.entity";
+import { SellerRefreshToken } from "../entity/Seller.RefreshToken.entity";
 
-export class TokenService {
-    constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
+export class SellerTokenService {
+    constructor(
+        private refreshTokenRepository: Repository<SellerRefreshToken>,
+    ) {}
 
     generateAccessToken(payload: JwtPayload): string {
         // Fetching Private key from privateKey.pem
@@ -41,11 +43,11 @@ export class TokenService {
         return refreshToken;
     }
 
-    async persistRefreshToken(user: User) {
+    async SellerPersistRefreshToken(seller: Seller) {
         const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // 1 Year
 
         const newRefreshToken = await this.refreshTokenRepository.save({
-            user: { ...user, password: undefined },
+            data: { ...seller, password: undefined },
             expireAt: new Date(Date.now() + MS_IN_YEAR),
         });
 

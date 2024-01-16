@@ -63,3 +63,17 @@ export interface ISellerData {
 export interface ICreateSellerRequest extends Request {
     body: ISellerData;
 }
+
+export interface IUpdateSellerRequest extends Request {
+    body: ISellerData;
+}
+
+// seller login
+export interface LoginSellerData {
+    email: string;
+    password: string;
+}
+
+export interface LoginSellerRequest extends Request {
+    body: LoginSellerData;
+}

@@ -6,106 +6,62 @@ import createHttpError from "http-errors";
 
 import {
     AuthRequest,
-    LoginUserRequest,
-    RegisterUserRequest,
+    ICreateSellerRequest,
+    LoginSellerRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
 
-import { UserService } from "../services/User.Service";
-import { TokenService } from "../services/User.Token.Service";
+import { SellerService } from "../services/Seller.Service";
 import { CredentialService } from "../services/Credential.Service";
+import { SellerTokenService } from "../services/Seller.Token.Service";
 
-export class UserAuthController {
+export class SellerAuthController {
     constructor(
-        private userService: UserService,
+        private sellerService: SellerService,
         private credentialService: CredentialService,
-        private tokenService: TokenService,
+        private tokenService: SellerTokenService,
         private logger: Logger,
     ) {}
 
-    async register(
-        req: RegisterUserRequest,
-        res: Response,
-        next: NextFunction,
-    ) {
+    async create(req: ICreateSellerRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);
 
             /* Checking that is there is any error in express
-             validation array while validating the req.body data */
+            validation array while validating the req.body data */
             if (!result.isEmpty()) {
                 return res.status(400).json({
                     errors: result.array(),
                 });
             }
 
-            const { firstName, lastName, email, password } = req.body;
+            const { name, email, password, phoneNumber, address, zipCode } =
+                req.body;
 
-            this.logger.info("New request to register a user", {
-                firstName,
-                lastName,
-                email,
+            this.logger.info("New request to create a seller", {
+                ...req.body,
                 password: "*****",
             });
 
-            /* Create user in database using User.Service create method */
-            const user = await this.userService.create({
-                firstName,
-                lastName,
+            const newSeller = await this.sellerService.create({
+                name,
                 email,
                 password,
-            });
-            this.logger.info("User has been registered", { id: user.id });
-
-            // Generate RS256 and HS256 JWT token
-            const payload: JwtPayload = {
-                sub: String(user.id),
-                role: user.role,
-            };
-
-            // generate jwt token
-            const accessToken = this.tokenService.generateAccessToken(payload);
-            const newRefreshToken =
-                await this.tokenService.UserPersistRefreshToken(user);
-
-            const refreshToken = this.tokenService.generateRefreshToken({
-                ...payload,
-                id: String(newRefreshToken.id),
-            });
-            // console.log(refreshToken)
-            // Saving access token in cookie
-            res.cookie("accessToken", accessToken, {
-                httpOnly: true,
-                domain: Config.COOKIE_DOMAIN,
-                sameSite: "strict",
-                maxAge:
-                    1000 * 60 * 60 * Number(Config.ACCESS_COOKIE_MAXAGE_HOUR),
+                phoneNumber,
+                address,
+                zipCode,
             });
 
-            // Saving refresh token in cookie
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                domain: Config.COOKIE_DOMAIN,
-                sameSite: "strict",
-                maxAge:
-                    1000 *
-                    60 *
-                    60 *
-                    24 *
-                    Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
-            });
-            // console.log("register contoller ", req.cookies);
+            this.logger.info("Seller has been created", { id: newSeller.id });
 
-            res.status(201).json({
-                id: user.id,
-            });
+            res.status(201).json({ id: newSeller.id });
         } catch (error) {
             return next(error);
         }
     }
 
-    async login(req: LoginUserRequest, res: Response, next: NextFunction) {
+    async login(req: LoginSellerRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);
@@ -120,15 +76,16 @@ export class UserAuthController {
 
             const { email, password } = req.body;
 
-            this.logger.info("New request to login a user", {
+            this.logger.info("New request to login a seller", {
                 email,
                 password: "*****",
             });
 
-            /* Create user in database using User.Service find method */
-            const user = await this.userService.findByEmailWithPassword(email);
+            /* Create seller in database using seller.Service find method */
+            const seller =
+                await this.sellerService.findByEmailWithPassword(email);
 
-            if (!user) {
+            if (!seller) {
                 const error = createHttpError(
                     400,
                     "Email or Password is incorrect",
@@ -138,7 +95,7 @@ export class UserAuthController {
 
             const isCorrectPassword =
                 await this.credentialService.comparePassword(
-                    user.password,
+                    seller.password,
                     password,
                 );
 
@@ -152,15 +109,15 @@ export class UserAuthController {
 
             // Generate RS256 and HS256 JWT token
             const payload: JwtPayload = {
-                sub: String(user.id),
-                role: user.role,
+                sub: String(seller.id),
+                role: seller.role,
             };
 
             // generate jwt token
             const accessToken = this.tokenService.generateAccessToken(payload);
 
             const newRefreshToken =
-                await this.tokenService.UserPersistRefreshToken(user);
+                await this.tokenService.SellerPersistRefreshToken(seller);
 
             const refreshToken = this.tokenService.generateRefreshToken({
                 ...payload,
@@ -189,10 +146,10 @@ export class UserAuthController {
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
             // console.log("contoller ", req.cookies);
-            this.logger.info("User has been logged in", { id: user.id });
+            this.logger.info("seller has been logged in", { id: seller.id });
 
             res.status(200).json({
-                id: user.id,
+                id: seller.id,
             });
         } catch (error) {
             return next(error);
@@ -200,8 +157,8 @@ export class UserAuthController {
     }
 
     async self(req: AuthRequest, res: Response) {
-        const user = await this.userService.findById(Number(req.auth.sub));
-        res.status(200).json({ ...user, password: undefined });
+        const seller = await this.sellerService.getById(Number(req.auth.sub));
+        res.status(200).json({ ...seller, password: undefined });
     }
 
     async newAccessToken(req: AuthRequest, res: Response, next: NextFunction) {
@@ -213,19 +170,21 @@ export class UserAuthController {
             };
             const accessToken = this.tokenService.generateAccessToken(payload);
 
-            const user = await this.userService.findById(Number(req.auth.sub));
+            const seller = await this.sellerService.getById(
+                Number(req.auth.sub),
+            );
 
-            if (!user) {
+            if (!seller) {
                 const err = createHttpError(
                     400,
-                    "User with the token could not find",
+                    "seller with the token could not find",
                 );
                 return next(err);
             }
 
             // Persist the refresh token
             const newRefreshToken =
-                await this.tokenService.UserPersistRefreshToken(user);
+                await this.tokenService.SellerPersistRefreshToken(seller);
 
             // Delete old refresh token
             await this.tokenService.deleteRefreshToken(Number(req.auth.id));
@@ -258,9 +217,9 @@ export class UserAuthController {
             });
 
             this.logger.info("New access token has been created", {
-                id: user.id,
+                id: seller.id,
             });
-            res.json({ id: user.id });
+            res.json({ id: seller.id });
         } catch (error) {
             return next(error);
         }
@@ -272,7 +231,9 @@ export class UserAuthController {
             this.logger.info("Refresh token has been deleted", {
                 id: req.auth.id,
             });
-            this.logger.info("User has been logged out", { id: req.auth.sub });
+            this.logger.info("seller has been logged out", {
+                id: req.auth.sub,
+            });
 
             res.clearCookie("accessToken");
             res.clearCookie("refreshToken");
