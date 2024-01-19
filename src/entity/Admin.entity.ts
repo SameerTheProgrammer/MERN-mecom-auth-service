@@ -26,7 +26,7 @@ export class Admin {
     @Column({ type: "int" })
     phoneNumber: number;
 
-    @Column({ type: "varchar", default: "seller" })
+    @Column({ type: "varchar", default: "admin" })
     role: string;
 
     @Column({ type: "jsonb", nullable: true })

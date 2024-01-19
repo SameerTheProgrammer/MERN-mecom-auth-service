@@ -6,7 +6,7 @@ import createHttpError from "http-errors";
 
 import {
     AuthRequest,
-    LoginUserRequest,
+    LoginRequest,
     RegisterUserRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
@@ -105,7 +105,7 @@ export class UserAuthController {
         }
     }
 
-    async login(req: LoginUserRequest, res: Response, next: NextFunction) {
+    async login(req: LoginRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);

@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import createHttpError from "http-errors";
 
-import { AuthRequest, LoginSellerRequest } from "../types/index.types";
+import { AuthRequest, LoginRequest } from "../types/index.types";
 import { Config } from "../config/config";
 
 import { AdminService } from "../services/Admin.Service";
@@ -19,7 +19,7 @@ export class AdminController {
         private logger: Logger,
     ) {}
 
-    async login(req: LoginSellerRequest, res: Response, next: NextFunction) {
+    async login(req: LoginRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);

@@ -7,7 +7,7 @@ import createHttpError from "http-errors";
 import {
     AuthRequest,
     ICreateSellerRequest,
-    LoginSellerRequest,
+    LoginRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
 
@@ -62,7 +62,7 @@ export class SellerAuthController {
         }
     }
 
-    async login(req: LoginSellerRequest, res: Response, next: NextFunction) {
+    async login(req: LoginRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization
             const result = validationResult(req);

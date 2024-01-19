@@ -17,14 +17,14 @@ export interface RegisterResponse {
     id: string;
 }
 
-// login user
-export interface LoginUserData {
+// login
+export interface LoginData {
     email: string;
     password: string;
 }
 
-export interface LoginUserRequest extends Request {
-    body: LoginUserData;
+export interface LoginRequest extends Request {
+    body: LoginData;
 }
 
 // cookies
@@ -66,14 +66,4 @@ export interface ICreateSellerRequest extends Request {
 
 export interface IUpdateSellerRequest extends Request {
     body: ISellerData;
-}
-
-// seller login
-export interface LoginSellerData {
-    email: string;
-    password: string;
-}
-
-export interface LoginSellerRequest extends Request {
-    body: LoginSellerData;
 }
