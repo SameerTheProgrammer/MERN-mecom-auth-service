@@ -7,6 +7,7 @@ import logger from "./config/logger";
 import userAuthRouter from "./routes/user.auth.Routes";
 import sellerAuthRouter from "./routes/seller.auth.Routes";
 import sellerRoute from "./routes/seller.Routes";
+import adminRoute from "./routes/admin.Routes";
 
 const app = express();
 app.use(express.static("public"));
@@ -14,8 +15,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/auth/user", userAuthRouter);
+
 app.use("/api/v1/seller", sellerRoute);
 app.use("/api/v1/auth/seller", sellerAuthRouter);
+
+app.use("/api/v1/admin", adminRoute);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {

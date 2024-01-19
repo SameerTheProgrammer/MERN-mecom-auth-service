@@ -1,11 +1,15 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { Config } from "./config";
 
 import { User } from "../entity/User.entity";
-import { Config } from "./config";
 import { UserRefreshToken } from "../entity/User.RefreshToken.entity";
+
 import { Seller } from "../entity/Seller.entity";
-import { SellerRefreshToken } from "./../entity/Seller.RefreshToken.entity";
+import { SellerRefreshToken } from "../entity/Seller.RefreshToken.entity";
+
+import { Admin } from "../entity/Admin.entity";
+import { AdminRefreshToken } from "../entity/Admin.RefreshToken.entity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -17,7 +21,14 @@ export const AppDataSource = new DataSource({
     // Dont't use this in production. Always keep false
     synchronize: false,
     logging: false,
-    entities: [User, UserRefreshToken, Seller, SellerRefreshToken],
+    entities: [
+        User,
+        UserRefreshToken,
+        Seller,
+        SellerRefreshToken,
+        Admin,
+        AdminRefreshToken,
+    ],
     migrations: ["src/migration/*.ts"],
     subscribers: [],
 });
