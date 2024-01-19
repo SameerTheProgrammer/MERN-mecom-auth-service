@@ -5,14 +5,13 @@ import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { Headers } from "../../src/types/index.types";
 
-import { User } from "../../src/entity/User.entity";
-import { UserRefreshToken } from "../../src/entity/User.RefreshToken.entity";
+import { Seller } from "../../src/entity/Seller.entity";
+import { SellerRefreshToken } from "../../src/entity/Seller.RefreshToken.entity";
 
 import { hashPassword } from "../../src/utils/bcrypt.utlis";
 import { isJwt } from "../../src/utils/index.utlis";
-import { Roles } from "../../src/contants/index.constant";
 
-describe("POST /api/v1/auth/user/login", () => {
+describe("POST /api/v1/auth/seller/login", () => {
     let connection: DataSource;
 
     beforeAll(async () => {
@@ -31,27 +30,28 @@ describe("POST /api/v1/auth/user/login", () => {
     describe("Given all field", () => {
         it("should return 200 status code", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(200);
@@ -59,27 +59,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return valid json response", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.headers["content-type"]).toEqual(
@@ -87,58 +88,60 @@ describe("POST /api/v1/auth/user/login", () => {
             );
         });
 
-        it("should return id of logged user", async () => {
+        it("should return id of logged Seller", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            const data = userRepository.create({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            const data = sellerRepository.create({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
-            await userRepository.save(data);
+            await sellerRepository.save(data);
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
             // Asserts
             expect((response.body as Record<string, string>).id).toBeDefined();
         });
 
-        it("should return id of logged user when user enter uppercase email", async () => {
+        it("should return id of logged Seller when Seller enter uppercase email", async () => {
             // Arange
-            const loginUserData = {
-                email: "Sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            const data = userRepository.create({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            const data = sellerRepository.create({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
-            await userRepository.save(data);
+            await sellerRepository.save(data);
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect((response.body as Record<string, string>).id).toBeDefined();
@@ -146,27 +149,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return 400 status code if email is incorrect", async () => {
             // Arange
-            const loginUserData = {
+            const loginSellerData = {
                 email: "sameer1@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(400);
@@ -174,27 +178,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return 400 status code if password is incorrect", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer123",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(400);
@@ -202,27 +207,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return the refresh token and access token inside a cookie", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/seller/login")
+                .send(loginSellerData);
 
             // Asserts
             let accsessToken = null;
@@ -245,27 +251,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return true if jwt token is valid", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             let accsessToken = null;
@@ -288,36 +295,37 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should presist the refresh token in the database", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             const refreshTokenRespository =
-                connection.getRepository(UserRefreshToken);
+                connection.getRepository(SellerRefreshToken);
 
             const token = await refreshTokenRespository
                 .createQueryBuilder("refreshToken")
-                .where("refreshToken.userId = :userId", {
-                    userId: (response.body as Record<string, string>).id,
+                .where("refreshToken.sellerId = :sellerId", {
+                    sellerId: (response.body as Record<string, string>).id,
                 })
                 .getMany();
 
@@ -328,27 +336,28 @@ describe("POST /api/v1/auth/user/login", () => {
     describe("Given field are missing ", () => {
         it("should return 400 if email is missing", async () => {
             // Arange
-            const loginUserData = {
+            const loginSellerData = {
                 email: "",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(400);
@@ -356,27 +365,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return 400 if password is missing", async () => {
             // Arange
-            const loginUserData = {
-                email: "sameer@gmail.com",
+            const loginSellerData = {
+                email: "shop@gmail.com",
                 password: "",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(400);
@@ -386,27 +396,28 @@ describe("POST /api/v1/auth/user/login", () => {
     describe("Fields are not in proper format", () => {
         it("should trim the all fields and return 200 status code", async () => {
             // Arange
-            const loginUserData = {
-                email: "  sameer@gmail.com  ",
+            const loginSellerData = {
+                email: "  shop@gmail.com  ",
                 password: "  $@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             // Asserts
             expect(response.statusCode).toBe(200);
@@ -414,27 +425,28 @@ describe("POST /api/v1/auth/user/login", () => {
 
         it("should return 400 status code if Lastname is not a valid", async () => {
             // Arange
-            const loginUserData = {
+            const loginSellerData = {
                 email: "sameergmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             expect(response.statusCode).toBe(400);
         });
@@ -443,27 +455,28 @@ describe("POST /api/v1/auth/user/login", () => {
     describe("error format received from express validator", () => {
         it("should return array of validation error", async () => {
             // Arange
-            const loginUserData = {
+            const loginSellerData = {
                 email: "sameergmail.com",
                 password: "$@meer1234",
             };
 
             // Act
-            const userRepository = connection.getRepository(User);
+            const sellerRepository = connection.getRepository(Seller);
             // converting normal password to hashed password
             const hashedPassword = await hashPassword("$@meer1234");
 
-            await userRepository.save({
-                firstName: "Sameer",
-                lastName: "Kumar",
-                email: "sameer@gmail.com",
+            await sellerRepository.save({
+                name: "shopName",
+                email: "shop@gmail.com",
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                phoneNumber: 1234567890,
+                address: "Jharkhand, India",
+                zipCode: 825555,
             });
 
             const response = await request(app)
-                .post("/api/v1/auth/user/login")
-                .send(loginUserData);
+                .post("/api/v1/auth/Seller/login")
+                .send(loginSellerData);
 
             expect(response.body).toHaveProperty("errors");
             expect(

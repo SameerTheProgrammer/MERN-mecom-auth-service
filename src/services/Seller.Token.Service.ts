@@ -47,7 +47,7 @@ export class SellerTokenService {
         const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // 1 Year
 
         const newRefreshToken = await this.refreshTokenRepository.save({
-            data: { ...seller, password: undefined },
+            seller: { ...seller, password: undefined },
             expireAt: new Date(Date.now() + MS_IN_YEAR),
         });
 

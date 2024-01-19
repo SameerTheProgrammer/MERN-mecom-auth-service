@@ -23,6 +23,7 @@ export class SellerAuthController {
         private logger: Logger,
     ) {}
 
+    //  for admin
     async create(req: ICreateSellerRequest, res: Response, next: NextFunction) {
         try {
             // express validation initization

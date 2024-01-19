@@ -9,6 +9,7 @@ export class SellerController {
         private logger: Logger,
     ) {}
 
+    //  for admin
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const sellers = await this.sellerService.getAll();

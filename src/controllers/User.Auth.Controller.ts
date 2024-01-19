@@ -283,6 +283,7 @@ export class UserAuthController {
         }
     }
 
+    //  for admin
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const sellers = await this.userService.getAll();
