@@ -3,13 +3,35 @@ import { ISellerData } from "../types/index.types";
 import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import createHttpError from "http-errors";
+import bcrypt from "bcrypt";
 
 export class SellerService {
     constructor(private sellerRepository: Repository<Seller>) {}
     async create(SellerData: ISellerData) {
+        const { name, email, password, phoneNumber, address, zipCode } =
+            SellerData;
+
+        const seller = await this.sellerRepository.findOne({
+            where: { email },
+        });
+        if (seller) {
+            const error = createHttpError(400, "Email already exists");
+            throw error;
+        }
+        // converting normal password to hashed password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         try {
             const sellerRepository = AppDataSource.getRepository(Seller);
-            const data = this.sellerRepository.create(SellerData);
+            const data = this.sellerRepository.create({
+                name,
+                email,
+                password: hashedPassword,
+                phoneNumber,
+                address,
+                zipCode,
+            });
             return await sellerRepository.save(data);
         } catch (error) {
             const err = createHttpError(
