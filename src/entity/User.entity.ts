@@ -26,6 +26,21 @@ export class User {
     @Column({ type: "varchar", default: "customer" })
     role: string;
 
+    @Column({ type: "int", nullable: true })
+    phoneNumber: number;
+
+    // @Column({ type: "jsonb" })
+    // Number: {
+    //     countryCode:string,
+    //     nationalNumber: string
+    // };
+
+    @Column({ type: "jsonb", nullable: true })
+    avatar: {
+        public_id: string;
+        url: string;
+    };
+
     @BeforeInsert()
     @BeforeUpdate()
     updateEmail() {
