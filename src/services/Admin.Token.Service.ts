@@ -43,7 +43,7 @@ export class AdminTokenService {
         return refreshToken;
     }
 
-    async SellerPersistRefreshToken(admin: Admin) {
+    async AdminPersistRefreshToken(admin: Admin) {
         const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // 1 Year
 
         const newRefreshToken = await this.refreshTokenRepository.save({

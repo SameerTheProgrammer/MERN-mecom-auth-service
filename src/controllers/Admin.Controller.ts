@@ -34,16 +34,16 @@ export class AdminController {
 
             const { email, password } = req.body;
 
-            this.logger.info("New request to login a seller", {
+            this.logger.info("New request to login a admin", {
                 email,
                 password: "*****",
             });
 
-            /* Create seller in database using seller.Service find method */
-            const seller =
+            /* Create admin in database using admin.Service find method */
+            const admin =
                 await this.adminService.findByEmailWithPassword(email);
 
-            if (!seller) {
+            if (!admin) {
                 const error = createHttpError(
                     400,
                     "Email or Password is incorrect",
@@ -53,7 +53,7 @@ export class AdminController {
 
             const isCorrectPassword =
                 await this.credentialService.comparePassword(
-                    seller.password,
+                    admin.password,
                     password,
                 );
 
@@ -67,15 +67,15 @@ export class AdminController {
 
             // Generate RS256 and HS256 JWT token
             const payload: JwtPayload = {
-                sub: String(seller.id),
-                role: seller.role,
+                sub: String(admin.id),
+                role: admin.role,
             };
 
             // generate jwt token
             const accessToken = this.tokenService.generateAccessToken(payload);
 
             const newRefreshToken =
-                await this.tokenService.SellerPersistRefreshToken(seller);
+                await this.tokenService.AdminPersistRefreshToken(admin);
 
             const refreshToken = this.tokenService.generateRefreshToken({
                 ...payload,
@@ -104,10 +104,10 @@ export class AdminController {
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
             // console.log("contoller ", req.cookies);
-            this.logger.info("seller has been logged in", { id: seller.id });
+            this.logger.info("admin has been logged in", { id: admin.id });
 
             res.status(200).json({
-                id: seller.id,
+                id: admin.id,
             });
         } catch (error) {
             return next(error);
@@ -115,8 +115,8 @@ export class AdminController {
     }
 
     async self(req: AuthRequest, res: Response) {
-        const seller = await this.adminService.findById(Number(req.auth.sub));
-        res.status(200).json({ ...seller, password: undefined });
+        const admin = await this.adminService.findById(Number(req.auth.sub));
+        res.status(200).json({ ...admin, password: undefined });
     }
 
     async newAccessToken(req: AuthRequest, res: Response, next: NextFunction) {
@@ -128,21 +128,21 @@ export class AdminController {
             };
             const accessToken = this.tokenService.generateAccessToken(payload);
 
-            const seller = await this.adminService.findById(
+            const admin = await this.adminService.findById(
                 Number(req.auth.sub),
             );
 
-            if (!seller) {
+            if (!admin) {
                 const err = createHttpError(
                     400,
-                    "seller with the token could not find",
+                    "Admin with this token could not find",
                 );
                 return next(err);
             }
 
             // Persist the refresh token
             const newRefreshToken =
-                await this.tokenService.SellerPersistRefreshToken(seller);
+                await this.tokenService.AdminPersistRefreshToken(admin);
 
             // Delete old refresh token
             await this.tokenService.deleteRefreshToken(Number(req.auth.id));
@@ -175,9 +175,9 @@ export class AdminController {
             });
 
             this.logger.info("New access token has been created", {
-                id: seller.id,
+                id: admin.id,
             });
-            res.json({ id: seller.id });
+            res.json({ id: admin.id });
         } catch (error) {
             return next(error);
         }
@@ -189,7 +189,7 @@ export class AdminController {
             this.logger.info("Refresh token has been deleted", {
                 id: req.auth.id,
             });
-            this.logger.info("seller has been logged out", {
+            this.logger.info("admin has been logged out", {
                 id: req.auth.sub,
             });
 
@@ -211,7 +211,7 @@ export class AdminController {
             }
             const admin = await this.adminService.findById(Number(adminId));
 
-            this.logger.info("Seller have been fetched");
+            this.logger.info("admin have been fetched");
             res.json(admin);
         } catch (error) {
             next(error);

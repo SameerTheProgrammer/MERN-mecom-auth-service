@@ -72,4 +72,20 @@ router
         (req: Request, res: Response, next: NextFunction) =>
             adminController.getById(req as AuthRequest, res, next),
     );
+
+// run this code to create admin
+// import { hashPassword } from "../utils/bcrypt.utlis";
+// router.post("/create", async (req, res) => {
+//     const hashedPassword = await hashPassword("@dminKum@r1234");
+//     const admin = await adminRespository.save({
+//         firstName: "Admin",
+//         lastName: "Kumar",
+//         email: "admin1@gmail.com",
+//         password: hashedPassword,
+//         phoneNumber: 1234567890,
+//     });
+//     res.status(201).json({
+//         id: admin.id,
+//     });
+// });
 export default router;
