@@ -15,7 +15,7 @@ const sellerService = new SellerService(sellerRepository);
 const sellerController = new SellerController(sellerService, logger);
 
 router
-    .route("/")
+    .route("/getAll")
     .get(
         authenticateMiddleware,
         canAccess([Roles.ADMIN]),
@@ -24,7 +24,7 @@ router
     );
 
 router
-    .route("/:id")
+    .route("/get/:id")
     .get((req: Request, res: Response, next: NextFunction) =>
         sellerController.getById(req, res, next),
     );
