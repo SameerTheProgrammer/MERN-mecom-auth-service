@@ -20,7 +20,7 @@ export default expressjwt({
             const refreshToken = await refreshTokenRepo.findOne({
                 where: {
                     id: Number((token?.payload as IRefreshTokenPayload).id),
-                    user: { id: Number(token?.payload.sub) },
+                    seller: { id: Number(token?.payload.sub) },
                 },
             });
             return refreshToken === null;

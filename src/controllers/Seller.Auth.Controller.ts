@@ -178,7 +178,7 @@ export class SellerAuthController {
             if (!seller) {
                 const err = createHttpError(
                     400,
-                    "seller with the token could not find",
+                    "Seller with this token could not find",
                 );
                 return next(err);
             }
