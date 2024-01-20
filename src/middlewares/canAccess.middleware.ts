@@ -8,10 +8,7 @@ export const canAccess = (roles: string[]) => {
         const roleFromToken = _req.auth.role;
 
         if (!roles.includes(roleFromToken)) {
-            const err = createHttpError(
-                403,
-                "You didn't have permission to create new Seller",
-            );
+            const err = createHttpError(403, "You didn't have permission");
             return next(err);
         }
         next();

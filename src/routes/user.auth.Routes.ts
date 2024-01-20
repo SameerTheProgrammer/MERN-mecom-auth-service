@@ -18,6 +18,7 @@ import authenticateMiddleware from "../middlewares/authenticate.middleware";
 import { AuthRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
+import { Roles } from "../contants/index.constant";
 import { canAccess } from "../middlewares/canAccess.middleware";
 
 const router = exprees.Router();
@@ -84,7 +85,7 @@ router
     .route("/getAll")
     .post(
         authenticateMiddleware,
-        canAccess,
+        canAccess([Roles.ADMIN]),
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.getAll(req as AuthRequest, res, next),
     );
