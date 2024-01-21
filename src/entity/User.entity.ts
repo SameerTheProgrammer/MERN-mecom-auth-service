@@ -26,14 +26,8 @@ export class User {
     @Column({ type: "varchar", default: "customer" })
     role: string;
 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: "bigint", nullable: true })
     phoneNumber: number;
-
-    // @Column({ type: "jsonb" })
-    // Number: {
-    //     countryCode:string,
-    //     nationalNumber: string
-    // };
 
     @Column({ type: "jsonb", nullable: true })
     avatar: {

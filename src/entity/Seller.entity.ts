@@ -26,7 +26,7 @@ export class Seller {
     @Column({ type: "varchar", length: 255 })
     address: string;
 
-    @Column({ type: "int" })
+    @Column({ type: "bigint" })
     phoneNumber: number;
 
     // @Column({ type: "jsonb" })
@@ -44,10 +44,10 @@ export class Seller {
         url: string;
     };
 
-    @Column({ type: "int" })
+    @Column({ type: "integer" })
     zipCode: number;
 
-    @Column({ type: "int", default: 0 })
+    @Column({ type: "integer", default: 0 })
     avaiableBalance: number;
 
     @UpdateDateColumn()

@@ -6,9 +6,7 @@ export class AddPhoneNumberAvatarColsInUserEnitity1705744260697
     name = "AddPhoneNumberAvatarColsInUserEnitity1705744260697";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `ALTER TABLE "users" ADD "phoneNumber" integer`,
-        );
+        await queryRunner.query(`ALTER TABLE "users" ADD "phoneNumber" bigint`);
         await queryRunner.query(`ALTER TABLE "users" ADD "avatar" jsonb`);
     }
 

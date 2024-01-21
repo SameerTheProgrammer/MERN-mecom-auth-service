@@ -23,7 +23,7 @@ export class Admin {
     @Column("varchar", { length: 255, select: false })
     password: string;
 
-    @Column({ type: "int" })
+    @Column({ type: "bigint" })
     phoneNumber: number;
 
     @Column({ type: "varchar", default: "admin" })
