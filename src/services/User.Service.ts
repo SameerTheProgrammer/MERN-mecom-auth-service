@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
 
 import { User } from "../entity/User.entity";
-import { UserData } from "../types/index.types";
+import { UserData, basicUserData } from "../types/index.types";
 import { Roles } from "../../src/contants/index.constant";
 
 export class UserService {
@@ -86,6 +86,45 @@ export class UserService {
             const err = createHttpError(
                 500,
                 "Failed to fetch all seller infomation from database",
+            );
+            throw err;
+        }
+    }
+
+    async updateInfo(
+        customerId: number,
+        { firstName, lastName, password, avatar, phoneNumber }: basicUserData,
+    ) {
+        const user = await this.userRepository.findOne({
+            where: { id: customerId },
+            select: ["password"],
+        });
+        if (!user) {
+            const err = createHttpError(400, "invalid user id");
+            throw err;
+        }
+        const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+        if (!isCorrectPassword) {
+            const err = createHttpError(400, "Password is incorrect");
+            throw err;
+        }
+
+        try {
+            const { public_id, url } = avatar;
+            return this.userRepository.update(customerId, {
+                firstName,
+                lastName,
+                avatar: {
+                    public_id,
+                    url,
+                },
+                phoneNumber,
+            });
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Failed to update user infomation from database",
             );
             throw err;
         }

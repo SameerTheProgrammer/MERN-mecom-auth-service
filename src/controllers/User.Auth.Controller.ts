@@ -6,6 +6,7 @@ import createHttpError from "http-errors";
 
 import {
     AuthRequest,
+    IUpdateInfoUserRequest,
     LoginRequest,
     RegisterUserRequest,
 } from "../types/index.types";
@@ -310,7 +311,41 @@ export class UserAuthController {
         }
     }
 
-    update(req: Request, res: Response) {
-        res.status(200).json();
+    async update(
+        req: IUpdateInfoUserRequest,
+        res: Response,
+        next: NextFunction,
+    ) {
+        const { firstName, lastName, password, avatar, phoneNumber } = req.body;
+        const userId = req.auth.sub;
+
+        if (isNaN(Number(userId))) {
+            next(
+                createHttpError(
+                    400,
+                    "User data not found or Invalid authentication",
+                ),
+            );
+            return;
+        }
+
+        this.logger.debug("Request for update user info", {
+            id: Number(userId),
+            ...req.body,
+            password: "****",
+        });
+
+        try {
+            const uUser = await this.userService.updateInfo(Number(userId), {
+                firstName,
+                lastName,
+                password,
+                avatar,
+                phoneNumber,
+            });
+            res.status(200).json({ id: Number(userId), uUser });
+        } catch (error) {
+            next(error);
+        }
     }
 }

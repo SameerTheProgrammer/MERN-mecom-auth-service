@@ -15,7 +15,7 @@ import { registerValidation } from "../validators/register.validator";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
-import { AuthRequest } from "../types/index.types";
+import { AuthRequest, IUpdateInfoUserRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { Roles } from "../contants/index.constant";
@@ -99,7 +99,8 @@ router
     .patch(
         authenticateMiddleware,
         canAccess([Roles.CUSTOMER]),
-        (req: Request, res: Response) => userAuthController.update(req, res),
+        (req: Request, res: Response, next: NextFunction) =>
+            userAuthController.update(req as IUpdateInfoUserRequest, res, next),
     );
 
 export default router;

@@ -1,32 +1,6 @@
 import { Request } from "express";
 import { Jwt } from "jsonwebtoken";
 
-// register user
-export interface UserData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
-
-export interface RegisterUserRequest extends Request {
-    body: UserData;
-}
-
-export interface RegisterResponse {
-    id: string;
-}
-
-// login
-export interface LoginData {
-    email: string;
-    password: string;
-}
-
-export interface LoginRequest extends Request {
-    body: LoginData;
-}
-
 // cookies
 export interface Headers {
     ["set-cookie"]: string[];
@@ -48,6 +22,48 @@ export interface AuthRequest extends Request {
         role: string;
         id?: string;
     };
+}
+
+// register user
+export interface UserData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
+
+export interface RegisterUserRequest extends Request {
+    body: UserData;
+}
+
+export interface RegisterResponse {
+    id: string;
+}
+
+// update basic info of user
+export interface basicUserData {
+    firstName: string;
+    lastName: string;
+    password: string;
+    phoneNumber: number;
+    avatar: {
+        public_id: string;
+        url: string;
+    };
+}
+
+export interface IUpdateInfoUserRequest extends AuthRequest {
+    body: basicUserData;
+}
+
+// login
+export interface LoginData {
+    email: string;
+    password: string;
+}
+
+export interface LoginRequest extends Request {
+    body: LoginData;
 }
 
 // seller create
