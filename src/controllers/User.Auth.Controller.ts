@@ -316,6 +316,16 @@ export class UserAuthController {
         res: Response,
         next: NextFunction,
     ) {
+        // express validation initization
+        const result = validationResult(req);
+
+        /* Checking that is there is any error in express
+                     validation array while validating the req.body data */
+        if (!result.isEmpty()) {
+            return res.status(400).json({
+                errors: result.array(),
+            });
+        }
         const { firstName, lastName, password, avatar, phoneNumber } = req.body;
         const userId = req.auth.sub;
 

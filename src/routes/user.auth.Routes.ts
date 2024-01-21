@@ -20,6 +20,7 @@ import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshT
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { Roles } from "../contants/index.constant";
 import { canAccess } from "../middlewares/canAccess.middleware";
+import { updateInfoValidation } from "../validators/updateInfoUser.validator";
 
 const router = exprees.Router();
 
@@ -99,6 +100,7 @@ router
     .patch(
         authenticateMiddleware,
         canAccess([Roles.CUSTOMER]),
+        updateInfoValidation,
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.update(req as IUpdateInfoUserRequest, res, next),
     );

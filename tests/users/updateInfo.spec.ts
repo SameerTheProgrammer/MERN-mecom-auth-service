@@ -121,7 +121,7 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
                 role: Roles.CUSTOMER,
             });
             const basicData = {
-                firstName: "Sameer",
+                firstName: "   Sameer",
                 lastName: "Kumar",
                 password: "S@meer1234",
                 phoneNumber: 9876543210,
@@ -151,13 +151,11 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
 
             expect(response.status).toBe(200);
             expect(users).toHaveLength(1);
-            expect(users[0].firstName).toBe(basicData.firstName);
+            expect(users[0].firstName).toBe("Sameer");
             expect(users[0].lastName).toBe(basicData.lastName);
             expect(users[0].phoneNumber).toBe("9876543210");
             expect(users[0].avatar.public_id).toBe(basicData.avatar.public_id);
             expect(users[0].avatar.url).toBe(basicData.avatar.url);
         });
     });
-
-    describe("Missing fields", () => {});
 });
