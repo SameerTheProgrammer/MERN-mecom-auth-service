@@ -309,4 +309,8 @@ export class UserAuthController {
             next(error);
         }
     }
+
+    update(req: Request, res: Response) {
+        res.status(200).json();
+    }
 }

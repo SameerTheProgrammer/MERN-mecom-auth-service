@@ -52,8 +52,11 @@ router
 
 router
     .route("/self")
-    .get(authenticateMiddleware, (req: Request, res: Response) =>
-        userAuthController.self(req as AuthRequest, res),
+    .get(
+        authenticateMiddleware,
+        canAccess([Roles.CUSTOMER]),
+        (req: Request, res: Response) =>
+            userAuthController.self(req as AuthRequest, res),
     );
 
 router
@@ -69,6 +72,7 @@ router
     .post(
         authenticateMiddleware,
         parseRefreshTokenMiddleware,
+        canAccess([Roles.CUSTOMER]),
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.logout(req as AuthRequest, res, next),
     );
@@ -88,6 +92,14 @@ router
         canAccess([Roles.ADMIN]),
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.getAll(req as AuthRequest, res, next),
+    );
+
+router
+    .route("/update-info")
+    .patch(
+        authenticateMiddleware,
+        canAccess([Roles.CUSTOMER]),
+        (req: Request, res: Response) => userAuthController.update(req, res),
     );
 
 export default router;
