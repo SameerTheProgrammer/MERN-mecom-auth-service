@@ -74,4 +74,19 @@ router
             sellerAuthController.logout(req as AuthRequest, res, next),
     );
 
+router
+    .route("/getAll")
+    .get(
+        authenticateMiddleware,
+        canAccess([Roles.ADMIN]),
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerAuthController.getAll(req, res, next),
+    );
+
+router
+    .route("/get/:id")
+    .get((req: Request, res: Response, next: NextFunction) =>
+        sellerAuthController.getById(req, res, next),
+    );
+
 export default router;

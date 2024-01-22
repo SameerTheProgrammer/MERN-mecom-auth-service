@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import logger from "./config/logger";
 import userAuthRouter from "./routes/user.auth.Routes";
 import sellerAuthRouter from "./routes/seller.auth.Routes";
-import sellerRoute from "./routes/seller.Routes";
 import adminRoute from "./routes/admin.Routes";
 
 const app = express();
@@ -16,7 +15,6 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth/user", userAuthRouter);
 
-app.use("/api/v1/seller", sellerRoute);
 app.use("/api/v1/auth/seller", sellerAuthRouter);
 
 app.use("/api/v1/admin", adminRoute);
