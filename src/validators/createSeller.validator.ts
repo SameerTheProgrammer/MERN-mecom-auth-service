@@ -10,7 +10,8 @@ export const createSellerValidation = checkSchema({
                 min: 2,
                 max: 100,
             },
-            errorMessage: "First Name should be at least 2 chars",
+            errorMessage:
+                "Name should be between least 2 chars and maximum 100 chars",
         },
     },
     email: {
@@ -58,7 +59,8 @@ export const createSellerValidation = checkSchema({
                 min: 10,
                 max: 255,
             },
-            errorMessage: "address should be at least 10 chars",
+            errorMessage:
+                "address should be between least 10 chars and maximum 255 chars",
         },
     },
     zipCode: {

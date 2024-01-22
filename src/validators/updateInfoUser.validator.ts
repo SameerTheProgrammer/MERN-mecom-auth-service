@@ -10,9 +10,10 @@ export const updateInfoValidation = checkSchema({
         isLength: {
             options: {
                 min: 2,
-                max: 40,
+                max: 30,
             },
-            errorMessage: "First Name should be at least 2 chars",
+            errorMessage:
+                "First Name should between least 2 chars and maximum 30 chars",
         },
     },
 
@@ -25,9 +26,10 @@ export const updateInfoValidation = checkSchema({
         isLength: {
             options: {
                 min: 2,
-                max: 40,
+                max: 30,
             },
-            errorMessage: "Last Name should be at least 2 chars",
+            errorMessage:
+                "Last Name should between least 2 chars and maximum 30 chars",
         },
     },
 
