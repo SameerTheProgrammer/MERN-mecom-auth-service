@@ -14,7 +14,7 @@ export const registerValidation = checkSchema({
         },
     },
     lastName: {
-        errorMessage: "First Name is required",
+        errorMessage: "Last Name is required",
         trim: true,
         notEmpty: true,
         isLength: {
@@ -22,7 +22,7 @@ export const registerValidation = checkSchema({
                 min: 2,
                 max: 40,
             },
-            errorMessage: "First Name should be at least 2 chars",
+            errorMessage: "Last Name should be at least 2 chars",
         },
     },
     email: {

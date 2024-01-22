@@ -55,17 +55,17 @@ export const createSellerValidation = checkSchema({
         notEmpty: true,
         isLength: {
             options: {
-                min: 5,
-                max: 200,
+                min: 10,
+                max: 255,
             },
-            errorMessage: "First Name should be at least 5 chars",
+            errorMessage: "address should be at least 10 chars",
         },
     },
     zipCode: {
-        errorMessage: "Password is required",
+        errorMessage: "zipCode is required",
         trim: true,
         notEmpty: {
-            errorMessage: "Password is required",
+            errorMessage: "zipCode is required",
         },
     },
 });
