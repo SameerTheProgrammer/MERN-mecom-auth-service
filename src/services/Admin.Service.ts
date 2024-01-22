@@ -74,7 +74,6 @@ export class AdminService {
             return this.adminRepository.update(adminId, {
                 firstName,
                 lastName,
-                password,
                 phoneNumber,
             });
         } catch (error) {

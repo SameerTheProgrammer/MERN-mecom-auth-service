@@ -4,5 +4,5 @@ module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
     verbose: true,
-    modulePathIgnorePatterns: ["/tests/sellers", "/tests/admins"],
+    // modulePathIgnorePatterns: ["/tests/sellers", "/tests/users"],
 };

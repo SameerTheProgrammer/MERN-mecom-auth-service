@@ -80,7 +80,7 @@ router
 
 router
     .route("/getAll")
-    .get(
+    .post(
         authenticateMiddleware,
         canAccess([Roles.ADMIN]),
         (req: Request, res: Response, next: NextFunction) =>
@@ -89,7 +89,7 @@ router
 
 router
     .route("/get/:id")
-    .get((req: Request, res: Response, next: NextFunction) =>
+    .post((req: Request, res: Response, next: NextFunction) =>
         sellerAuthController.getById(req, res, next),
     );
 
