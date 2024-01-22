@@ -4,7 +4,11 @@ import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import createHttpError from "http-errors";
 
-import { AuthRequest, LoginRequest } from "../types/index.types";
+import {
+    AuthRequest,
+    IUpdateInfoAdminRequest,
+    LoginRequest,
+} from "../types/index.types";
 import { Config } from "../config/config";
 
 import { AdminService } from "../services/Admin.Service";
@@ -213,6 +217,53 @@ export class AdminController {
 
             this.logger.info("admin have been fetched");
             res.json(admin);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async update(
+        req: IUpdateInfoAdminRequest,
+        res: Response,
+        next: NextFunction,
+    ) {
+        // express validation initization
+        const result = validationResult(req);
+
+        /* Checking that is there is any error in express
+                     validation array while validating the req.body data */
+        if (!result.isEmpty()) {
+            return res.status(400).json({
+                errors: result.array(),
+            });
+        }
+        const { firstName, lastName, password, phoneNumber } = req.body;
+        const adminId = req.auth.sub;
+
+        if (isNaN(Number(adminId))) {
+            next(
+                createHttpError(
+                    400,
+                    "admin data not found or Invalid authentication",
+                ),
+            );
+            return;
+        }
+
+        this.logger.info("Request for update admin info", {
+            id: Number(adminId),
+            ...req.body,
+            password: "****",
+        });
+
+        try {
+            const admin = await this.adminService.updateInfo(Number(adminId), {
+                firstName,
+                lastName,
+                password,
+                phoneNumber,
+            });
+            res.status(200).json({ id: Number(adminId), admin });
         } catch (error) {
             next(error);
         }

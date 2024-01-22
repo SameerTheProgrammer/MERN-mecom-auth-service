@@ -2,12 +2,14 @@ import { Repository } from "typeorm";
 import createHttpError from "http-errors";
 
 import { Admin } from "../entity/Admin.entity";
+import { IBasicAdminData } from "../types/index.types";
+import bcrypt from "bcrypt";
 
 export class AdminService {
-    constructor(private userRepository: Repository<Admin>) {}
+    constructor(private adminRepository: Repository<Admin>) {}
 
     async findByEmail(email: string) {
-        return await this.userRepository.findOne({
+        return await this.adminRepository.findOne({
             where: {
                 email: email.toLowerCase(),
             },
@@ -15,7 +17,7 @@ export class AdminService {
     }
 
     async findByEmailWithPassword(email: string) {
-        return await this.userRepository.findOne({
+        return await this.adminRepository.findOne({
             where: {
                 email: email.toLowerCase(),
             },
@@ -32,7 +34,7 @@ export class AdminService {
 
     async findById(customerId: number) {
         try {
-            return this.userRepository.findOne({
+            return this.adminRepository.findOne({
                 where: {
                     id: customerId,
                 },
@@ -40,7 +42,45 @@ export class AdminService {
         } catch (error) {
             const err = createHttpError(
                 500,
-                "Failed to fetch all seller infomation from database",
+                "Failed to fetch all admin infomation from database",
+            );
+            throw err;
+        }
+    }
+
+    async updateInfo(
+        adminId: number,
+        { firstName, lastName, password, phoneNumber }: IBasicAdminData,
+    ) {
+        const admin = await this.adminRepository.findOne({
+            where: { id: adminId },
+            select: ["password"],
+        });
+        if (!admin) {
+            const err = createHttpError(400, "invalid admin id");
+            throw err;
+        }
+        const isCorrectPassword = await bcrypt.compare(
+            password,
+            admin.password,
+        );
+
+        if (!isCorrectPassword) {
+            const err = createHttpError(400, "Password is incorrect");
+            throw err;
+        }
+
+        try {
+            return this.adminRepository.update(adminId, {
+                firstName,
+                lastName,
+                password,
+                phoneNumber,
+            });
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Failed to update admin infomation in database",
             );
             throw err;
         }

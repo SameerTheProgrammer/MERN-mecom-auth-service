@@ -6,7 +6,7 @@ import logger from "../config/logger";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
-import { AuthRequest } from "../types/index.types";
+import { AuthRequest, IUpdateInfoAdminRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { AdminService } from "../services/Admin.Service";
@@ -16,6 +16,7 @@ import { AdminTokenService } from "../services/Admin.Token.Service";
 import { AdminController } from "../controllers/Admin.Controller";
 import { canAccess } from "../middlewares/canAccess.middleware";
 import { Roles } from "../contants/index.constant";
+import { updateInfoValidation } from "../validators/updateInfoAdmin.validator";
 
 const router = exprees.Router();
 
@@ -71,6 +72,16 @@ router
         authenticateMiddleware,
         (req: Request, res: Response, next: NextFunction) =>
             adminController.getById(req as AuthRequest, res, next),
+    );
+
+router
+    .route("/update-info")
+    .patch(
+        authenticateMiddleware,
+        canAccess([Roles.ADMIN]),
+        updateInfoValidation,
+        (req: Request, res: Response, next: NextFunction) =>
+            adminController.update(req as IUpdateInfoAdminRequest, res, next),
     );
 
 // run this code to create admin

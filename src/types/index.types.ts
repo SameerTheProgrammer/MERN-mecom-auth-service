@@ -59,6 +59,19 @@ export interface IUpdateInfoSellerRequest extends AuthRequest {
     body: IBasicSellerData;
 }
 
+/* ==============  Admin ======================= */
+// update basic seller data
+export interface IBasicAdminData {
+    firstName: string;
+    lastName: string;
+    password: string;
+    phoneNumber: number;
+}
+
+export interface IUpdateInfoAdminRequest extends AuthRequest {
+    body: IBasicAdminData;
+}
+
 /* ============= Common ================== */
 // login
 export interface LoginData {
