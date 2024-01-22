@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { ISellerData } from "../types/index.types";
+import { IBasicSellerData, ISellerData } from "../types/index.types";
 import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import createHttpError from "http-errors";
@@ -94,6 +94,52 @@ export class SellerService {
             const err = createHttpError(
                 500,
                 "Failed to fetch all seller infomation from database",
+            );
+            throw err;
+        }
+    }
+
+    async updateInfo(
+        sellerId: number,
+        {
+            name,
+            password,
+            phoneNumber,
+            description,
+            address,
+            zipCode,
+        }: IBasicSellerData,
+    ) {
+        const seller = await this.sellerRepository.findOne({
+            where: { id: sellerId },
+            select: ["password"],
+        });
+        if (!seller) {
+            const err = createHttpError(400, "invalid seller id");
+            throw err;
+        }
+        const isCorrectPassword = await bcrypt.compare(
+            password,
+            seller.password,
+        );
+
+        if (!isCorrectPassword) {
+            const err = createHttpError(400, "Password is incorrect");
+            throw err;
+        }
+
+        try {
+            return this.sellerRepository.update(sellerId, {
+                name,
+                phoneNumber,
+                description,
+                address,
+                zipCode,
+            });
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Failed to update seller infomation in database",
             );
             throw err;
         }

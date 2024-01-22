@@ -6,7 +6,7 @@ import logger from "../config/logger";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
-import { AuthRequest } from "../types/index.types";
+import { AuthRequest, IUpdateInfoSellerRequest } from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { SellerRefreshToken } from "../entity/Seller.RefreshToken.entity";
@@ -17,6 +17,7 @@ import { canAccess } from "../middlewares/canAccess.middleware";
 import { createSellerValidation } from "../validators/createSeller.validator";
 import { Roles } from "../contants/index.constant";
 import { SellerTokenService } from "../services/Seller.Token.Service";
+import { updateInfoValidation } from "../validators/updateInfoSeller.validator";
 
 const router = exprees.Router();
 
@@ -53,8 +54,11 @@ router
 
 router
     .route("/self")
-    .get(authenticateMiddleware, (req: Request, res: Response) =>
-        sellerAuthController.self(req as AuthRequest, res),
+    .get(
+        authenticateMiddleware,
+        canAccess([Roles.SELLER]),
+        (req: Request, res: Response) =>
+            sellerAuthController.self(req as AuthRequest, res),
     );
 
 router
@@ -87,6 +91,20 @@ router
     .route("/get/:id")
     .get((req: Request, res: Response, next: NextFunction) =>
         sellerAuthController.getById(req, res, next),
+    );
+
+router
+    .route("/update-info")
+    .patch(
+        authenticateMiddleware,
+        canAccess([Roles.SELLER]),
+        updateInfoValidation,
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerAuthController.update(
+                req as IUpdateInfoSellerRequest,
+                res,
+                next,
+            ),
     );
 
 export default router;

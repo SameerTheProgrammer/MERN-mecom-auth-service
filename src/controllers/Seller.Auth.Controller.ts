@@ -7,6 +7,7 @@ import createHttpError from "http-errors";
 import {
     AuthRequest,
     ICreateSellerRequest,
+    IUpdateInfoSellerRequest,
     LoginRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
@@ -267,6 +268,59 @@ export class SellerAuthController {
 
             this.logger.info("Seller have been fetched");
             res.json(seller);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async update(
+        req: IUpdateInfoSellerRequest,
+        res: Response,
+        next: NextFunction,
+    ) {
+        // express validation initization
+        const result = validationResult(req);
+
+        /* Checking that is there is any error in express
+                     validation array while validating the req.body data */
+        if (!result.isEmpty()) {
+            return res.status(400).json({
+                errors: result.array(),
+            });
+        }
+        const { name, password, phoneNumber, description, address, zipCode } =
+            req.body;
+        const sellerId = req.auth.sub;
+
+        if (isNaN(Number(sellerId))) {
+            next(
+                createHttpError(
+                    400,
+                    "seller data not found or Invalid authentication",
+                ),
+            );
+            return;
+        }
+
+        this.logger.info("Request for update seller info", {
+            id: Number(sellerId),
+            ...req.body,
+            password: "****",
+        });
+
+        try {
+            const seller = await this.sellerService.updateInfo(
+                Number(sellerId),
+                {
+                    name,
+                    password,
+                    phoneNumber,
+                    description,
+                    address,
+                    zipCode,
+                },
+            );
+            res.status(200).json({ id: Number(sellerId), seller });
         } catch (error) {
             next(error);
         }
