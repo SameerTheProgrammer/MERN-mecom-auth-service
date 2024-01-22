@@ -85,7 +85,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             expect(sellers).toHaveLength(1);
             expect(sellers[0].name).toBe(sellerData.name);
             expect(sellers[0].email).toBe(sellerData.email);
-            expect(sellers[0].phoneNumber).toBe(sellerData.phoneNumber);
+            expect(sellers[0].phoneNumber).toBe(String(sellerData.phoneNumber));
             expect(sellers[0].address).toBe(sellerData.address);
             expect(sellers[0].zipCode).toBe(sellerData.zipCode);
             expect(sellers[0].role).toBe(Roles.SELLER);
@@ -178,7 +178,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             expect(sellers[0].address).not.toBe(sellerData.address);
             expect(sellers[0].address).toBe("Jharkhand, India");
 
-            expect(sellers[0].phoneNumber).toBe(1234567890);
+            expect(sellers[0].phoneNumber).toBe("1234567890");
 
             expect(sellers[0].zipCode).toBe(825555);
         });
