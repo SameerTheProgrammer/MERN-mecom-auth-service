@@ -46,10 +46,6 @@ export interface basicUserData {
     lastName: string;
     password: string;
     phoneNumber: number;
-    avatar: {
-        public_id: string;
-        url: string;
-    };
 }
 
 export interface IUpdateInfoUserRequest extends AuthRequest {

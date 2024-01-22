@@ -326,7 +326,7 @@ export class UserAuthController {
                 errors: result.array(),
             });
         }
-        const { firstName, lastName, password, avatar, phoneNumber } = req.body;
+        const { firstName, lastName, password, phoneNumber } = req.body;
         const userId = req.auth.sub;
 
         if (isNaN(Number(userId))) {
@@ -339,7 +339,7 @@ export class UserAuthController {
             return;
         }
 
-        this.logger.debug("Request for update user info", {
+        this.logger.info("Request for update user info", {
             id: Number(userId),
             ...req.body,
             password: "****",
@@ -350,7 +350,6 @@ export class UserAuthController {
                 firstName,
                 lastName,
                 password,
-                avatar,
                 phoneNumber,
             });
             res.status(200).json({ id: Number(userId), uUser });

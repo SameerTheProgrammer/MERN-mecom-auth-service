@@ -93,7 +93,7 @@ export class UserService {
 
     async updateInfo(
         customerId: number,
-        { firstName, lastName, password, avatar, phoneNumber }: basicUserData,
+        { firstName, lastName, password, phoneNumber }: basicUserData,
     ) {
         const user = await this.userRepository.findOne({
             where: { id: customerId },
@@ -111,14 +111,9 @@ export class UserService {
         }
 
         try {
-            const { public_id, url } = avatar;
             return this.userRepository.update(customerId, {
                 firstName,
                 lastName,
-                avatar: {
-                    public_id,
-                    url,
-                },
                 phoneNumber,
             });
         } catch (error) {

@@ -38,10 +38,6 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
                 lastName: "Kumar",
                 password: "S@meer1234",
                 phoneNumber: 9876543210,
-                avatar: {
-                    public_id: "",
-                    public_url: "",
-                },
             };
             // Act
             const response = await request(app)
@@ -63,10 +59,6 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
                 lastName: "Kumar",
                 password: "S@meer1234",
                 phoneNumber: 9876543210,
-                avatar: {
-                    public_id: "",
-                    public_url: "",
-                },
             };
             // Act
             const response = await request(app)
@@ -89,10 +81,6 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
                 lastName: "Kumar",
                 password: "S@meer123",
                 phoneNumber: 9876543210,
-                avatar: {
-                    public_id: "",
-                    url: "",
-                },
             };
             // Act
             const hashedPassword = await hashPassword("S@meer1234");
@@ -125,10 +113,6 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
                 lastName: "Kumar",
                 password: "S@meer1234",
                 phoneNumber: 9876543210,
-                avatar: {
-                    public_id: "",
-                    url: "",
-                },
             };
             // Act
             const hashedPassword = await hashPassword("S@meer1234");
@@ -154,8 +138,6 @@ describe("PATCH /api/v1/auth/user/update-info", () => {
             expect(users[0].firstName).toBe("Sameer");
             expect(users[0].lastName).toBe(basicData.lastName);
             expect(users[0].phoneNumber).toBe("9876543210");
-            expect(users[0].avatar.public_id).toBe(basicData.avatar.public_id);
-            expect(users[0].avatar.url).toBe(basicData.avatar.url);
         });
     });
 });

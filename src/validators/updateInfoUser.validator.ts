@@ -15,6 +15,7 @@ export const updateInfoValidation = checkSchema({
             errorMessage: "First Name should be at least 2 chars",
         },
     },
+
     lastName: {
         errorMessage: "First Name is required",
         trim: true,
@@ -28,15 +29,25 @@ export const updateInfoValidation = checkSchema({
             },
             errorMessage: "Last Name should be at least 2 chars",
         },
-        // exists: true,
     },
+
     password: {
         trim: true,
         notEmpty: {
             errorMessage: "Password is required",
         },
     },
+
     phoneNumber: {
         trim: true,
+        errorMessage: "Password is required",
+        custom: {
+            options: (value) => {
+                if (!value) {
+                    throw new Error("phoneNumber is required");
+                }
+                return true;
+            },
+        },
     },
 });
