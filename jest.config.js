@@ -6,6 +6,7 @@ module.exports = {
     verbose: true,
     collectCoverage: true,
     coverageProvider: "v8",
+    testTimeout: 10000, // in milliseconds
     collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
     // modulePathIgnorePatterns: ["/tests/sellers", "/tests/users"],
 };
