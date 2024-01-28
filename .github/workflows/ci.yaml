@@ -30,7 +30,7 @@ jobs:
                   DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
                   DB_NAME: ${{ secrets.TEST_DB_NAME }}
 
-                  REFRESH_JWT_SECRET_KEY: ${{ secrets.REFRESH_JWT_SECRET_KEY }}
+                  REFRESH_JWT_SECRET_KEY: ${{ secrets.TEST_REFRESH_JWT_SECRET_KEY }}
                   ACCESS_TOKEN_EXPIRY_HOUR: ${{secrets.TEST_ACCESS_TOKEN_EXPIRY_HOUR}}
                   REFRESH_TOKEN_EXPIRY_DAYS: ${{secrets.TEST_REFRESH_TOKEN_EXPIRY_DAYS}}
                   TOKEN_ISSUER: ${{secrets.TEST_TOKEN_ISSUER}}
@@ -39,8 +39,8 @@ jobs:
                   REFRESH_COOKIE_MAXAGE_DAYS: ${{secrets.TEST_REFRESH_COOKIE_MAXAGE_DAYS}}
                   COOKIE_DOMAIN: ${{secrets.TEST_COOKIE_DOMAIN}}
 
-                  JWKS_URI: ${{ secrets.JWKS_URI }}
-                  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                  JWKS_URI: ${{ secrets.TEST_JWKS_URI }}
+                  PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}
             - name: Build-ts
               run: npm run build
             - name: SonarCloud Scan
