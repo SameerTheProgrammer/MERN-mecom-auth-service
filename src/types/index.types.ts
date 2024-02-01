@@ -19,7 +19,7 @@ export interface RegisterResponse {
 }
 
 // update basic info of user
-export interface basicUserData {
+export interface BasicUserData {
     firstName: string;
     lastName: string;
     password: string;
@@ -27,7 +27,7 @@ export interface basicUserData {
 }
 
 export interface IUpdateInfoUserRequest extends AuthRequest {
-    body: basicUserData;
+    body: BasicUserData;
 }
 
 /* ==============  Seller ======================= */

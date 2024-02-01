@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
 
 import { User } from "../entity/User.entity";
-import { UserData, basicUserData } from "../types/index.types";
+import { UserData, BasicUserData } from "../types/index.types";
 import { Roles } from "../../src/contants/index.constant";
 
 export class UserService {
@@ -93,7 +93,7 @@ export class UserService {
 
     async updateInfo(
         customerId: number,
-        { firstName, lastName, password, phoneNumber }: basicUserData,
+        { firstName, lastName, password, phoneNumber }: BasicUserData,
     ) {
         const user = await this.userRepository.findOne({
             where: { id: customerId },
