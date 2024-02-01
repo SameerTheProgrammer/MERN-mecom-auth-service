@@ -65,7 +65,7 @@ export class UserService {
 
     async getAll() {
         try {
-            return this.userRepository.find();
+            return await this.userRepository.find();
         } catch (error) {
             const err = createHttpError(
                 500,
@@ -77,7 +77,7 @@ export class UserService {
 
     async findById(customerId: number) {
         try {
-            return this.userRepository.findOne({
+            return await this.userRepository.findOne({
                 where: {
                     id: customerId,
                 },
@@ -111,7 +111,7 @@ export class UserService {
         }
 
         try {
-            return this.userRepository.update(customerId, {
+            return await this.userRepository.update(customerId, {
                 firstName,
                 lastName,
                 phoneNumber,

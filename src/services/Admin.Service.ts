@@ -34,7 +34,7 @@ export class AdminService {
 
     async findById(customerId: number) {
         try {
-            return this.adminRepository.findOne({
+            return await this.adminRepository.findOne({
                 where: {
                     id: customerId,
                 },
@@ -71,7 +71,7 @@ export class AdminService {
         }
 
         try {
-            return this.adminRepository.update(adminId, {
+            return await this.adminRepository.update(adminId, {
                 firstName,
                 lastName,
                 phoneNumber,
