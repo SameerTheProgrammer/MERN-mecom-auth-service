@@ -107,7 +107,7 @@ export class AdminController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
-            // console.log("contoller ", req.cookies);
+
             this.logger.info("admin has been logged in", { id: admin.id });
 
             res.status(200).json({

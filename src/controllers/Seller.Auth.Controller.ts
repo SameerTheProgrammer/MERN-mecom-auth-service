@@ -147,7 +147,7 @@ export class SellerAuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
-            // console.log("contoller ", req.cookies);
+
             this.logger.info("seller has been logged in", { id: seller.id });
 
             res.status(200).json({

@@ -96,7 +96,6 @@ export class UserAuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
-            // console.log("register contoller ", req.cookies);
 
             res.status(201).json({
                 id: user.id,
@@ -189,7 +188,7 @@ export class UserAuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
-            // console.log("contoller ", req.cookies);
+
             this.logger.info("User has been logged in", { id: user.id });
 
             res.status(200).json({
