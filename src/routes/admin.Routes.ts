@@ -1,4 +1,9 @@
-import exprees, { NextFunction, Request, Response } from "express";
+import exprees, {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from "express";
 
 import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
@@ -33,55 +38,62 @@ const adminController = new AdminController(
     logger,
 );
 
-router
-    .route("/login")
-    .post(loginValidation, (req: Request, res: Response, next: NextFunction) =>
-        adminController.login(req, res, next),
-    );
+router.route("/login").post(loginValidation, (async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    await adminController.newAccessToken(req as AuthRequest, res, next);
+}) as RequestHandler);
 
 router
     .route("/self")
     .get(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
-        (req: Request, res: Response) =>
-            adminController.self(req as AuthRequest, res),
+        (async (req: Request, res: Response) => {
+            await adminController.self(req as AuthRequest, res);
+        }) as RequestHandler,
     );
 
-router
-    .route("/newAccessToken")
-    .post(
-        validateRefreshTokenMiddleware,
-        (req: Request, res: Response, next: NextFunction) =>
-            adminController.newAccessToken(req as AuthRequest, res, next),
-    );
+router.route("/newAccessToken").post(
+    validateRefreshTokenMiddleware as RequestHandler,
+    (async (req: Request, res: Response, next: NextFunction) => {
+        await adminController.newAccessToken(req as AuthRequest, res, next);
+    }) as RequestHandler,
+);
 
 router
     .route("/logout")
     .post(
-        authenticateMiddleware,
-        parseRefreshTokenMiddleware,
+        authenticateMiddleware as RequestHandler,
+        parseRefreshTokenMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
-        (req: Request, res: Response, next: NextFunction) =>
-            adminController.logout(req as AuthRequest, res, next),
+        (async (req: Request, res: Response, next: NextFunction) => {
+            await adminController.logout(req as AuthRequest, res, next);
+        }) as RequestHandler,
     );
 
-router
-    .route("/get/:id")
-    .post(
-        authenticateMiddleware,
-        (req: Request, res: Response, next: NextFunction) =>
-            adminController.getById(req as AuthRequest, res, next),
-    );
+router.route("/get/:id").post(
+    authenticateMiddleware as RequestHandler,
+    (async (req: Request, res: Response, next: NextFunction) => {
+        await adminController.getById(req as AuthRequest, res, next);
+    }) as RequestHandler,
+);
 
 router
     .route("/update-info")
     .patch(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
         updateInfoValidation,
-        (req: Request, res: Response, next: NextFunction) =>
-            adminController.update(req as IUpdateInfoAdminRequest, res, next),
+        (async (req: Request, res: Response, next: NextFunction) => {
+            await adminController.update(
+                req as IUpdateInfoAdminRequest,
+                res,
+                next,
+            );
+        }) as RequestHandler,
     );
 
 // run this code to create admin

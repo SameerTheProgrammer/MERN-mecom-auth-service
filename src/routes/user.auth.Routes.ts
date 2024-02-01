@@ -1,4 +1,9 @@
-import exprees, { NextFunction, Request, Response } from "express";
+import exprees, {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from "express";
 
 import { UserAuthController } from "../controllers/User.Auth.Controller";
 
@@ -42,67 +47,100 @@ router
     .post(
         registerValidation,
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.register(req, res, next),
+            userAuthController.register(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/login")
-    .post(loginValidation, (req: Request, res: Response, next: NextFunction) =>
-        userAuthController.login(req, res, next),
+    .post(
+        loginValidation,
+        (req: Request, res: Response, next: NextFunction) =>
+            userAuthController.login(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/self")
     .get(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.CUSTOMER]),
         (req: Request, res: Response) =>
-            userAuthController.self(req as AuthRequest, res),
+            userAuthController.self(
+                req as AuthRequest,
+                res,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/newAccessToken")
     .post(
-        validateRefreshTokenMiddleware,
+        validateRefreshTokenMiddleware as RequestHandler,
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.newAccessToken(req as AuthRequest, res, next),
+            userAuthController.newAccessToken(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/logout")
     .post(
-        authenticateMiddleware,
-        parseRefreshTokenMiddleware,
+        authenticateMiddleware as RequestHandler,
+        parseRefreshTokenMiddleware as RequestHandler,
         canAccess([Roles.CUSTOMER]),
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.logout(req as AuthRequest, res, next),
+            userAuthController.logout(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/get/:id")
     .post(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.getById(req as AuthRequest, res, next),
+            userAuthController.getById(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/getAll")
     .post(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.getAll(req as AuthRequest, res, next),
+            userAuthController.getAll(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/update-info")
     .patch(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.CUSTOMER]),
         updateInfoValidation,
         (req: Request, res: Response, next: NextFunction) =>
-            userAuthController.update(req as IUpdateInfoUserRequest, res, next),
+            userAuthController.update(
+                req as IUpdateInfoUserRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 export default router;
