@@ -73,7 +73,7 @@ export class SellerService {
 
     async getAll() {
         try {
-            return this.sellerRepository.find();
+            return await this.sellerRepository.find();
         } catch (error) {
             const err = createHttpError(
                 500,
@@ -85,7 +85,7 @@ export class SellerService {
 
     async getById(sellerId: number) {
         try {
-            return this.sellerRepository.findOne({
+            return await this.sellerRepository.findOne({
                 where: {
                     id: sellerId,
                 },
@@ -129,7 +129,7 @@ export class SellerService {
         }
 
         try {
-            return this.sellerRepository.update(sellerId, {
+            return await this.sellerRepository.update(sellerId, {
                 name,
                 phoneNumber,
                 description,
