@@ -1,4 +1,9 @@
-import exprees, { NextFunction, Request, Response } from "express";
+import exprees, {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from "express";
 
 import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
@@ -39,72 +44,103 @@ const sellerAuthController = new SellerAuthController(
 router
     .route("/create")
     .post(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
         createSellerValidation,
         (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.create(req, res, next),
+            sellerAuthController.create(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/login")
-    .post(loginValidation, (req: Request, res: Response, next: NextFunction) =>
-        sellerAuthController.login(req, res, next),
+    .post(
+        loginValidation,
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerAuthController.login(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/self")
     .get(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.SELLER]),
         (req: Request, res: Response) =>
-            sellerAuthController.self(req as AuthRequest, res),
+            sellerAuthController.self(
+                req as AuthRequest,
+                res,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/newAccessToken")
     .post(
-        validateRefreshTokenMiddleware,
+        validateRefreshTokenMiddleware as RequestHandler,
         (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.newAccessToken(req as AuthRequest, res, next),
+            sellerAuthController.newAccessToken(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/logout")
     .post(
-        authenticateMiddleware,
-        parseRefreshTokenMiddleware,
+        authenticateMiddleware as RequestHandler,
+        parseRefreshTokenMiddleware as RequestHandler,
         (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.logout(req as AuthRequest, res, next),
+            sellerAuthController.logout(
+                req as AuthRequest,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/getAll")
     .post(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
         (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.getAll(req, res, next),
+            sellerAuthController.getAll(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/get/:id")
-    .post((req: Request, res: Response, next: NextFunction) =>
-        sellerAuthController.getById(req, res, next),
+    .post(
+        (req: Request, res: Response, next: NextFunction) =>
+            sellerAuthController.getById(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
     );
 
 router
     .route("/update-info")
     .patch(
-        authenticateMiddleware,
+        authenticateMiddleware as RequestHandler,
         canAccess([Roles.SELLER]),
         updateInfoValidation,
-        (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.update(
+        (async (req: Request, res: Response, next: NextFunction) => {
+            await sellerAuthController.update(
                 req as IUpdateInfoSellerRequest,
                 res,
                 next,
-            ),
+            );
+        }) as RequestHandler,
     );
 
 export default router;
