@@ -43,7 +43,7 @@ router.route("/login").post(loginValidation, (async (
     res: Response,
     next: NextFunction,
 ) => {
-    await adminController.newAccessToken(req as AuthRequest, res, next);
+    await adminController.login(req as AuthRequest, res, next);
 }) as RequestHandler);
 
 router
