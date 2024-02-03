@@ -3,7 +3,7 @@ import createHttpError from "http-errors";
 
 import { Admin } from "../entity/Admin.entity";
 import { IBasicAdminData } from "../types/index.types";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export class AdminService {
     constructor(private adminRepository: Repository<Admin>) {}

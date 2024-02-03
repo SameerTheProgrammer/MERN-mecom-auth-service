@@ -3,7 +3,7 @@ import { IBasicSellerData, ISellerData } from "../types/index.types";
 import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import createHttpError from "http-errors";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export class SellerService {
     constructor(private sellerRepository: Repository<Seller>) {}
