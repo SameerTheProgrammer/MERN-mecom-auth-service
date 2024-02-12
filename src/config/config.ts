@@ -26,6 +26,8 @@ const {
 
     JWKS_URI,
 
+    FRONTEND_URL,
+
     PRIVATE_KEY,
 } = process.env;
 
@@ -49,6 +51,8 @@ export const Config = {
     COOKIE_DOMAIN,
 
     JWKS_URI,
+
+    FRONTEND_URL,
 
     PRIVATE_KEY,
 };
