@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, RequestHandler } from "express";
 import { Jwt } from "jsonwebtoken";
 
 /* ==============  User  ======================= */
@@ -40,8 +40,20 @@ export interface ISellerData {
     address: string;
     zipCode: number;
 }
+export interface ISellerDataImage {
+    name: string;
+    email: string;
+    password: string;
+    phoneNumber: number;
+    address: string;
+    zipCode: number;
+}
 
 export interface ICreateSellerRequest extends Request {
+    files: {
+        logo: Express.Multer.File[];
+        banner: Express.Multer.File[];
+    };
     body: ISellerData;
 }
 
@@ -104,4 +116,17 @@ export interface AuthRequest extends Request {
         role: string;
         id?: string;
     };
+}
+
+// multer
+interface FileArray {
+    path: string;
+}
+
+interface MulterFiles {
+    [fileType: string]: FileArray[];
+}
+
+export interface MuterDeleteRequest extends RequestHandler {
+    files: MulterFiles;
 }

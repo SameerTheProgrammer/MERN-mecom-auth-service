@@ -9,12 +9,14 @@ import {
     ICreateSellerRequest,
     IUpdateInfoSellerRequest,
     LoginRequest,
+    MuterDeleteRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
 
 import { SellerService } from "../services/Seller.Service";
 import { CredentialService } from "../services/Credential.Service";
 import { SellerTokenService } from "../services/Seller.Token.Service";
+import { deleteMulterImage } from "../utils/multer";
 
 export class SellerAuthController {
     constructor(
@@ -33,6 +35,11 @@ export class SellerAuthController {
             /* Checking that is there is any error in express
             validation array while validating the req.body data */
             if (!result.isEmpty()) {
+                deleteMulterImage(
+                    req as unknown as MuterDeleteRequest,
+                    this.logger,
+                );
+
                 return res.status(400).json({
                     errors: result.array(),
                 });
@@ -59,6 +66,10 @@ export class SellerAuthController {
 
             res.status(201).json({ id: newSeller.id });
         } catch (error) {
+            deleteMulterImage(
+                req as unknown as MuterDeleteRequest,
+                this.logger,
+            );
             return next(error);
         }
     }

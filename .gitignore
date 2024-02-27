@@ -1,5 +1,6 @@
 certs/
 public/
+uploads/
 
 # Logs
 logs
