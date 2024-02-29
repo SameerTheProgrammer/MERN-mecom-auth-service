@@ -29,6 +29,9 @@ const {
     FRONTEND_URL,
 
     PRIVATE_KEY,
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINAR_API_SECRET,
 } = process.env;
 
 export const Config = {
@@ -55,4 +58,7 @@ export const Config = {
     FRONTEND_URL,
 
     PRIVATE_KEY,
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINAR_API_SECRET,
 };

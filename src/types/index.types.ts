@@ -1,6 +1,11 @@
 import { Request, RequestHandler } from "express";
 import { Jwt } from "jsonwebtoken";
 
+type Image = {
+    public_id: string;
+    url: string;
+};
+
 /* ==============  User  ======================= */
 // register user
 export interface UserData {
@@ -39,6 +44,8 @@ export interface ISellerData {
     phoneNumber: number;
     address: string;
     zipCode: number;
+    avatar: Image | null;
+    banner: Image | null;
 }
 export interface ISellerDataImage {
     name: string;
@@ -47,6 +54,11 @@ export interface ISellerDataImage {
     phoneNumber: number;
     address: string;
     zipCode: number;
+}
+
+export interface IFiles {
+    logo: Express.Multer.File[];
+    banner: Express.Multer.File[];
 }
 
 export interface ICreateSellerRequest extends Request {
