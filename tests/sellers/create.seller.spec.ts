@@ -32,7 +32,7 @@ describe("Post /api/v1/auth/seller/create", () => {
     // Happy Path
     describe("Given all field", () => {
         it("should return a 201 status code ", async () => {
-            // Arange
+            // Arrange
             const accessToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -51,7 +51,12 @@ describe("Post /api/v1/auth/seller/create", () => {
             const response = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send(sellerData);
+                .field(sellerData);
+            // .attach(
+            //     "logo",
+            //     "https://blog.logrocket.com/wp-content/uploads/2021/02/node-multer.png",
+            // );
+
             // Assert
             expect(response.statusCode).toBe(201);
         });
@@ -76,7 +81,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send(sellerData);
+                .field(sellerData);
 
             // Assert
             const sellerRepository = connection.getRepository(Seller);
@@ -105,7 +110,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/seller/create")
-                .send(sellerData);
+                .field(sellerData);
             // Assert
             const sellerRepository = connection.getRepository(Seller);
             const sellers = await sellerRepository.find();
@@ -133,7 +138,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             const response = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send(sellerData);
+                .field(sellerData);
 
             // Assert
             const sellerRepository = connection.getRepository(Seller);
@@ -164,7 +169,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send(sellerData);
+                .field(sellerData);
             // Assert
             const sellerRepository = connection.getRepository(Seller);
             const sellers = await sellerRepository.find();
@@ -202,7 +207,7 @@ describe("Post /api/v1/auth/seller/create", () => {
             const response = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send(sellerData);
+                .field(sellerData);
 
             // Assert
             const sellerRespository = connection.getRepository(Seller);
@@ -231,27 +236,27 @@ describe("Post /api/v1/auth/seller/create", () => {
             const response = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send({ ...sellerData, password: "" });
+                .field({ ...sellerData, password: "" });
 
             const response1 = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send({ ...sellerData, password: "$hopC1" });
+                .field({ ...sellerData, password: "$hopC1" });
 
             const response2 = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send({ ...sellerData, password: "$hopCentre" });
+                .field({ ...sellerData, password: "$hopCentre" });
 
             const response3 = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send({ ...sellerData, password: "hopCentre123" });
+                .field({ ...sellerData, password: "hopCentre123" });
 
             const response4 = await request(app)
                 .post("/api/v1/auth/seller/create")
                 .set("Cookie", [`accessToken=${accessToken};`])
-                .send({ ...sellerData, password: "$hopentre123" });
+                .field({ ...sellerData, password: "$hopentre123" });
 
             // Assert
             const sellerRespository = connection.getRepository(Seller);
