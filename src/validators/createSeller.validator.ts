@@ -48,7 +48,9 @@ export const createSellerValidation = checkSchema({
         errorMessage: "Phone Number is required",
         trim: true,
         notEmpty: true,
-        isMobilePhone: true,
+        isMobilePhone: {
+            errorMessage: "Invalid Phone Number",
+        },
     },
     address: {
         errorMessage: "address is required",

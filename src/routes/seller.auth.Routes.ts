@@ -11,7 +11,11 @@ import logger from "../config/logger";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
-import { AuthRequest, IUpdateInfoSellerRequest } from "../types/index.types";
+import {
+    AuthRequest,
+    ICreateSellerRequest,
+    IUpdateInfoSellerRequest,
+} from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { SellerRefreshToken } from "../entity/Seller.RefreshToken.entity";
@@ -23,6 +27,7 @@ import { createSellerValidation } from "../validators/createSeller.validator";
 import { Roles } from "../contants/index.constant";
 import { SellerTokenService } from "../services/Seller.Token.Service";
 import { updateInfoValidation } from "../validators/updateInfoSeller.validator";
+import { multerUpload } from "../utils/multer";
 
 const router = exprees.Router();
 
@@ -41,19 +46,21 @@ const sellerAuthController = new SellerAuthController(
     logger,
 );
 
-router
-    .route("/create")
-    .post(
-        authenticateMiddleware as RequestHandler,
-        canAccess([Roles.ADMIN]),
-        createSellerValidation,
-        (req: Request, res: Response, next: NextFunction) =>
-            sellerAuthController.create(
-                req,
-                res,
-                next,
-            ) as unknown as RequestHandler,
-    );
+router.route("/create").post(
+    authenticateMiddleware as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    multerUpload([
+        { name: "logo", maxCount: 1 },
+        { name: "banner", maxCount: 1 },
+    ]),
+    createSellerValidation,
+    (req: Request, res: Response, next: NextFunction) =>
+        sellerAuthController.create(
+            req as ICreateSellerRequest,
+            res,
+            next,
+        ) as unknown as RequestHandler,
+);
 
 router
     .route("/login")

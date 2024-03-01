@@ -9,12 +9,15 @@ import {
     ICreateSellerRequest,
     IUpdateInfoSellerRequest,
     LoginRequest,
+    MuterDeleteRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
 
 import { SellerService } from "../services/Seller.Service";
 import { CredentialService } from "../services/Credential.Service";
 import { SellerTokenService } from "../services/Seller.Token.Service";
+import { deleteMulterImage } from "../utils/multer";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 export class SellerAuthController {
     constructor(
@@ -33,6 +36,11 @@ export class SellerAuthController {
             /* Checking that is there is any error in express
             validation array while validating the req.body data */
             if (!result.isEmpty()) {
+                deleteMulterImage(
+                    req as unknown as MuterDeleteRequest,
+                    this.logger,
+                );
+
                 return res.status(400).json({
                     errors: result.array(),
                 });
@@ -46,6 +54,25 @@ export class SellerAuthController {
                 password: "*****",
             });
 
+            let logoImage, bannerImage;
+
+            if (Object.keys(req.files).length !== 0) {
+                if (req.files.logo && req.files.logo.length !== 0) {
+                    logoImage = await uploadToCloudinary(
+                        req.files?.logo[0].path,
+                        `mecom/profileImages/${email}`,
+                        this.logger,
+                    );
+                }
+                if (req.files.banner && req.files.banner.length !== 0) {
+                    bannerImage = await uploadToCloudinary(
+                        req.files?.banner[0].path,
+                        `mecom/profileImages/${email}`,
+                        this.logger,
+                    );
+                }
+            }
+
             const newSeller = await this.sellerService.create({
                 name,
                 email,
@@ -53,12 +80,33 @@ export class SellerAuthController {
                 phoneNumber,
                 address,
                 zipCode,
+                avatar: logoImage
+                    ? {
+                          public_id: logoImage?.public_id,
+                          url: logoImage?.url,
+                      }
+                    : null,
+                banner: bannerImage
+                    ? {
+                          public_id: bannerImage?.public_id,
+                          url: bannerImage?.url,
+                      }
+                    : null,
             });
 
             this.logger.info("Seller has been created", { id: newSeller.id });
 
+            deleteMulterImage(
+                req as unknown as MuterDeleteRequest,
+                this.logger,
+            );
+
             res.status(201).json({ id: newSeller.id });
         } catch (error) {
+            deleteMulterImage(
+                req as unknown as MuterDeleteRequest,
+                this.logger,
+            );
             return next(error);
         }
     }

@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 export class SellerService {
     constructor(private sellerRepository: Repository<Seller>) {}
     async create(SellerData: ISellerData) {
-        const { name, email, password, phoneNumber, address, zipCode } =
+        const { name, email, password, phoneNumber, address, zipCode, avatar } =
             SellerData;
 
         const seller = await this.sellerRepository.findOne({
@@ -31,6 +31,10 @@ export class SellerService {
                 phoneNumber,
                 address,
                 zipCode,
+                avatar: {
+                    public_id: avatar?.public_id,
+                    url: avatar?.url,
+                },
             });
             return await sellerRepository.save(data);
         } catch (error) {
