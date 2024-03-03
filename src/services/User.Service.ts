@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import createHttpError from "http-errors";
 
 import { User } from "../entity/User.entity";
-import { UserData, basicUserData } from "../types/index.types";
+import { IPagination, UserData, basicUserData } from "../types/index.types";
 import { Roles } from "../../src/contants/index.constant";
 
 export class UserService {
@@ -63,9 +63,15 @@ export class UserService {
         });
     }
 
-    async getAll() {
+    async getAll(validationQuery: IPagination) {
         try {
-            return await this.userRepository.find();
+            const queryBuilder = this.userRepository.createQueryBuilder();
+            return await queryBuilder
+                .skip(
+                    (validationQuery.currentPage - 1) * validationQuery.perPage,
+                )
+                .take(validationQuery.perPage)
+                .getManyAndCount();
         } catch (error) {
             const err = createHttpError(
                 500,
