@@ -142,3 +142,8 @@ interface MulterFiles {
 export interface MuterDeleteRequest extends RequestHandler {
     files: MulterFiles;
 }
+
+export interface IPagination {
+    perPage: number;
+    currentPage: number;
+}

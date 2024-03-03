@@ -1,5 +1,9 @@
 import { Repository } from "typeorm";
-import { IBasicSellerData, ISellerData } from "../types/index.types";
+import {
+    IBasicSellerData,
+    IPagination,
+    ISellerData,
+} from "../types/index.types";
 import { AppDataSource } from "../config/data-source";
 import { Seller } from "../entity/Seller.entity";
 import createHttpError from "http-errors";
@@ -75,9 +79,13 @@ export class SellerService {
         });
     }
 
-    async getAll() {
+    async getAll(validateQuery: IPagination) {
         try {
-            return await this.sellerRepository.find();
+            const queryBuilder = this.sellerRepository.createQueryBuilder();
+            return await queryBuilder
+                .skip((validateQuery.currentPage - 1) * validateQuery.perPage)
+                .take(validateQuery.perPage)
+                .getManyAndCount();
         } catch (error) {
             const err = createHttpError(
                 500,

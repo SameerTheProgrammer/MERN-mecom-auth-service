@@ -28,6 +28,7 @@ import { Roles } from "../contants/index.constant";
 import { SellerTokenService } from "../services/Seller.Token.Service";
 import { updateInfoValidation } from "../validators/updateInfoSeller.validator";
 import { multerUpload } from "../utils/multer";
+import paginationValidator from "../validators/pagination.validator";
 
 const router = exprees.Router();
 
@@ -116,6 +117,7 @@ router
     .post(
         authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
+        paginationValidator,
         (req: Request, res: Response, next: NextFunction) =>
             sellerAuthController.getAll(
                 req,
