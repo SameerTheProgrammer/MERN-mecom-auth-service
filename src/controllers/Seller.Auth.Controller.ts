@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { Logger } from "winston";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import createHttpError from "http-errors";
 
 import {
     AuthRequest,
     ICreateSellerRequest,
+    IPagination,
     IUpdateInfoSellerRequest,
     LoginRequest,
     MuterDeleteRequest,
@@ -297,9 +298,17 @@ export class SellerAuthController {
     //  for admin
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const sellers = await this.sellerService.getAll();
+            const validateQuery = matchedData(req, { onlyValidData: true });
+            const [sellers, count] = await this.sellerService.getAll(
+                validateQuery as IPagination,
+            );
             this.logger.info("All seller have been fetched");
-            res.json(sellers);
+            res.json({
+                currentPage: validateQuery.currentPage as number,
+                perPage: validateQuery.perPage as number,
+                total: count,
+                data: sellers,
+            });
         } catch (error) {
             next(error);
         }
