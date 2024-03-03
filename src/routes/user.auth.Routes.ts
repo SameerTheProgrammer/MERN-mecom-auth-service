@@ -26,6 +26,7 @@ import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middle
 import { Roles } from "../contants/index.constant";
 import { canAccess } from "../middlewares/canAccess.middleware";
 import { updateInfoValidation } from "../validators/updateInfoUser.validator";
+import paginationValidator from "../validators/pagination.validator";
 
 const router = exprees.Router();
 
@@ -121,6 +122,7 @@ router
     .post(
         authenticateMiddleware as RequestHandler,
         canAccess([Roles.ADMIN]),
+        paginationValidator,
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.getAll(
                 req as AuthRequest,

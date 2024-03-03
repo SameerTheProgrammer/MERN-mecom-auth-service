@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { Logger } from "winston";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import createHttpError from "http-errors";
 
 import {
     AuthRequest,
+    IPagination,
     IUpdateInfoUserRequest,
     LoginRequest,
     RegisterUserRequest,
@@ -287,7 +288,10 @@ export class UserAuthController {
     //  for admin
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const sellers = await this.userService.getAll();
+            const validationQuery = matchedData(req, { onlyValidData: true });
+            const sellers = await this.userService.getAll(
+                validationQuery as IPagination,
+            );
             this.logger.info("All seller have been fetched");
             res.json(sellers);
         } catch (error) {
