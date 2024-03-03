@@ -9,7 +9,7 @@ import { Roles } from "../../src/contants/index.constant";
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
 
-    async create({ firstName, lastName, email, password }: UserData) {
+    async create({ firstName, lastName, email, password, avatar }: UserData) {
         // check is email is already registered or not
         const user = await this.userRepository.findOne({ where: { email } });
         if (user) {
@@ -28,6 +28,10 @@ export class UserService {
                 email,
                 password: hashedPassword,
                 role: Roles.CUSTOMER,
+                avatar: {
+                    public_id: avatar?.public_id,
+                    url: avatar?.url,
+                },
             });
             return await this.userRepository.save(data);
         } catch (error) {

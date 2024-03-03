@@ -9,6 +9,7 @@ import {
     IPagination,
     IUpdateInfoUserRequest,
     LoginRequest,
+    MuterDeleteRequest,
     RegisterUserRequest,
 } from "../types/index.types";
 import { Config } from "../config/config";
@@ -16,6 +17,8 @@ import { Config } from "../config/config";
 import { UserService } from "../services/User.Service";
 import { TokenService } from "../services/User.Token.Service";
 import { CredentialService } from "../services/Credential.Service";
+import { deleteMulterImage } from "../utils/multer";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 export class UserAuthController {
     constructor(
@@ -37,6 +40,10 @@ export class UserAuthController {
             /* Checking that is there is any error in express
              validation array while validating the req.body data */
             if (!result.isEmpty()) {
+                deleteMulterImage(
+                    req as unknown as MuterDeleteRequest,
+                    this.logger,
+                );
                 return res.status(400).json({
                     errors: result.array(),
                 });
@@ -51,13 +58,32 @@ export class UserAuthController {
                 password: "*****",
             });
 
+            let avatarImage;
+
+            if (Object.keys(req.files).length !== 0) {
+                if (req.files.avatar && req.files.avatar.length !== 0) {
+                    avatarImage = await uploadToCloudinary(
+                        req.files?.avatar[0].path,
+                        `mecom/profileImages/${email}`,
+                        this.logger,
+                    );
+                }
+            }
+
             /* Create user in database using User.Service create method */
             const user = await this.userService.create({
                 firstName,
                 lastName,
                 email,
                 password,
+                avatar: avatarImage
+                    ? {
+                          public_id: avatarImage.public_id,
+                          url: avatarImage.url,
+                      }
+                    : null,
             });
+
             this.logger.info("User has been registered", { id: user.id });
 
             // Generate RS256 and HS256 JWT token
@@ -75,7 +101,7 @@ export class UserAuthController {
                 ...payload,
                 id: String(newRefreshToken.id),
             });
-            // console.log(refreshToken)
+
             // Saving access token in cookie
             res.cookie("accessToken", accessToken, {
                 httpOnly: true,
@@ -97,12 +123,20 @@ export class UserAuthController {
                     24 *
                     Number(Config.REFRESH_COOKIE_MAXAGE_DAYS),
             });
-            // console.log("register contoller ", req.cookies);
+
+            deleteMulterImage(
+                req as unknown as MuterDeleteRequest,
+                this.logger,
+            );
 
             res.status(201).json({
                 id: user.id,
             });
         } catch (error) {
+            deleteMulterImage(
+                req as unknown as MuterDeleteRequest,
+                this.logger,
+            );
             return next(error);
         }
     }

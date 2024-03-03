@@ -39,7 +39,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             expect(response.statusCode).toBe(201);
@@ -56,7 +56,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             expect(
@@ -75,7 +75,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -97,7 +97,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             expect((response.body as Record<string, string>).id).toBeDefined();
@@ -114,7 +114,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -134,7 +134,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRepository = connection.getRepository(User);
@@ -158,7 +158,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const user = await userRespository.find();
@@ -179,11 +179,11 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
-            let accessToken = null;
-            let refreshToken = null;
+            let accessToken: null | string = null;
+            let refreshToken: null | string = null;
 
             const cookies =
                 (response.headers as unknown as Headers)["set-cookie"] || [];
@@ -213,11 +213,11 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
-            let accessToken = null;
-            let refreshToken = null;
+            let accessToken: null | string = null;
+            let refreshToken: null | string = null;
 
             const cookies =
                 (response.headers as unknown as Headers)["set-cookie"] || [];
@@ -247,7 +247,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const refreshTokenRespository =
@@ -276,7 +276,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const user = await userRespository.find();
@@ -297,7 +297,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -317,7 +317,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -337,7 +337,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -357,7 +357,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
             // Assert
             const userRespository = connection.getRepository(User);
             const user = await userRespository.find();
@@ -379,7 +379,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -406,7 +406,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -427,7 +427,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -448,7 +448,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -469,7 +469,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -490,7 +490,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -511,7 +511,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -532,7 +532,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -553,7 +553,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // Assert
             const userRespository = connection.getRepository(User);
@@ -576,7 +576,7 @@ describe("Post /api/v1/auth/user/register", () => {
             // Act
             const response = await request(app)
                 .post("/api/v1/auth/user/register")
-                .send(userData);
+                .field(userData);
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const responseBody = JSON.parse(response.text);

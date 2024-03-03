@@ -16,10 +16,6 @@ export const multerUpload = (uploadFields: Field[]) => {
     });
 
     const upload = Multer({ storage, limits: { fileSize: 1572864 } });
-
-    // if(uploadFields){
-
-    // }
     const cpUpload = upload.fields(uploadFields);
     return cpUpload;
 };

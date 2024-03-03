@@ -13,9 +13,13 @@ export interface UserData {
     lastName: string;
     email: string;
     password: string;
+    avatar: Image | null;
 }
 
 export interface RegisterUserRequest extends Request {
+    files: {
+        avatar: Express.Multer.File[];
+    };
     body: UserData;
 }
 

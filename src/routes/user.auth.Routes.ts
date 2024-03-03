@@ -20,13 +20,18 @@ import { registerValidation } from "../validators/register.validator";
 import { loginValidation } from "../validators/login.validator";
 import { CredentialService } from "../services/Credential.Service";
 import authenticateMiddleware from "../middlewares/authenticate.middleware";
-import { AuthRequest, IUpdateInfoUserRequest } from "../types/index.types";
+import {
+    AuthRequest,
+    IUpdateInfoUserRequest,
+    RegisterUserRequest,
+} from "../types/index.types";
 import validateRefreshTokenMiddleware from "../middlewares/user.validateRefreshToken.middleware";
 import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middleware";
 import { Roles } from "../contants/index.constant";
 import { canAccess } from "../middlewares/canAccess.middleware";
 import { updateInfoValidation } from "../validators/updateInfoUser.validator";
 import paginationValidator from "../validators/pagination.validator";
+import { multerUpload } from "../utils/multer";
 
 const router = exprees.Router();
 
@@ -46,10 +51,11 @@ const userAuthController = new UserAuthController(
 router
     .route("/register")
     .post(
+        multerUpload([{ name: "avatar", maxCount: 1 }]),
         registerValidation,
         (req: Request, res: Response, next: NextFunction) =>
             userAuthController.register(
-                req,
+                req as RegisterUserRequest,
                 res,
                 next,
             ) as unknown as RequestHandler,
