@@ -323,13 +323,13 @@ export class UserAuthController {
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const validationQuery = matchedData(req, { onlyValidData: true });
-            const users = await this.userService.getAll(
+            const [users, count] = await this.userService.getAll(
                 validationQuery as IPagination,
             );
             this.logger.info("All user have been fetched");
             res.json({
-                currentPage: validateQuery.currentPage as number,
-                perPage: validateQuery.perPage as number,
+                currentPage: validationQuery.currentPage as number,
+                perPage: validationQuery.perPage as number,
                 total: count,
                 data: users,
             });
