@@ -323,11 +323,11 @@ export class UserAuthController {
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const validationQuery = matchedData(req, { onlyValidData: true });
-            const sellers = await this.userService.getAll(
+            const users = await this.userService.getAll(
                 validationQuery as IPagination,
             );
-            this.logger.info("All seller have been fetched");
-            res.json(sellers);
+            this.logger.info("All user have been fetched");
+            res.json(users);
         } catch (error) {
             next(error);
         }
@@ -340,10 +340,10 @@ export class UserAuthController {
                 next(createHttpError(400, "Invalid url param."));
                 return;
             }
-            const seller = await this.userService.findById(Number(customerId));
+            const user = await this.userService.findById(Number(customerId));
 
-            this.logger.info("Seller have been fetched");
-            res.json(seller);
+            this.logger.info("user have been fetched");
+            res.json(user);
         } catch (error) {
             next(error);
         }
