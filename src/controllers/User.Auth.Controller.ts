@@ -327,7 +327,12 @@ export class UserAuthController {
                 validationQuery as IPagination,
             );
             this.logger.info("All user have been fetched");
-            res.json(users);
+            res.json({
+                currentPage: validateQuery.currentPage as number,
+                perPage: validateQuery.perPage as number,
+                total: count,
+                data: users,
+            });
         } catch (error) {
             next(error);
         }
