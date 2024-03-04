@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 import {
     IBasicSellerData,
     IQueryParams,
@@ -79,12 +79,48 @@ export class SellerService {
         });
     }
 
-    async getAll(validateQuery: IQueryParams) {
+    async getAll(validationQuery: IQueryParams) {
         try {
-            const queryBuilder = this.sellerRepository.createQueryBuilder();
+            const queryBuilder =
+                this.sellerRepository.createQueryBuilder("seller");
+            if (validationQuery.q) {
+                const searchTerm = `%${validationQuery.q}`;
+                queryBuilder.where(
+                    new Brackets((qb) => {
+                        qb.where("seller.name ILike :q", { q: searchTerm })
+                            .orWhere("seller.email ILike :q", { q: searchTerm })
+                            .orWhere("seller.description ILike :q", {
+                                q: searchTerm,
+                            })
+                            .orWhere("seller.address ILike :q", {
+                                q: searchTerm,
+                            })
+                            .orWhere("seller.phoneNumber ILike :q", {
+                                q: searchTerm,
+                            })
+                            .orWhere("seller.zipCode ILike :q", {
+                                q: searchTerm,
+                            })
+                            .orWhere("seller.avaiableBalance ILike :q", {
+                                q: searchTerm,
+                            });
+                    }),
+                );
+            }
+
+            // uncomment when status field added in database
+            // if (validationQuery.status) {
+            //     queryBuilder.andWhere("seller.status ILike :q", {
+            //         status: validationQuery.status,
+            //     });
+            // }
+
             return await queryBuilder
-                .skip((validateQuery.currentPage - 1) * validateQuery.perPage)
-                .take(validateQuery.perPage)
+                .skip(
+                    (validationQuery.currentPage - 1) * validationQuery.perPage,
+                )
+                .take(validationQuery.perPage)
+                .orderBy("user.id", "DESC")
                 .getManyAndCount();
         } catch (error) {
             const err = createHttpError(

@@ -150,5 +150,6 @@ export interface MuterDeleteRequest extends RequestHandler {
 export interface IQueryParams {
     perPage: number;
     currentPage: number;
-    q: unknown;
+    q: string;
+    status: string;
 }
