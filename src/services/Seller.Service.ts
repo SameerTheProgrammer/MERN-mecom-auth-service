@@ -83,25 +83,20 @@ export class SellerService {
         try {
             const queryBuilder =
                 this.sellerRepository.createQueryBuilder("seller");
+
             if (validationQuery.q) {
-                const searchTerm = `%${validationQuery.q}`;
+                const searchTerm = `%${validationQuery.q}%`;
+
                 queryBuilder.where(
                     new Brackets((qb) => {
-                        qb.where("seller.name ILike :q", { q: searchTerm })
+                        qb.where("seller.name ILike :q", {
+                            q: searchTerm,
+                        })
                             .orWhere("seller.email ILike :q", { q: searchTerm })
                             .orWhere("seller.description ILike :q", {
                                 q: searchTerm,
                             })
                             .orWhere("seller.address ILike :q", {
-                                q: searchTerm,
-                            })
-                            .orWhere("seller.phoneNumber ILike :q", {
-                                q: searchTerm,
-                            })
-                            .orWhere("seller.zipCode ILike :q", {
-                                q: searchTerm,
-                            })
-                            .orWhere("seller.avaiableBalance ILike :q", {
                                 q: searchTerm,
                             });
                     }),
@@ -120,7 +115,7 @@ export class SellerService {
                     (validationQuery.currentPage - 1) * validationQuery.perPage,
                 )
                 .take(validationQuery.perPage)
-                .orderBy("user.id", "DESC")
+                .orderBy("seller.id", "DESC")
                 .getManyAndCount();
         } catch (error) {
             const err = createHttpError(

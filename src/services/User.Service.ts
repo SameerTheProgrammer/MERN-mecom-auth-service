@@ -73,6 +73,7 @@ export class UserService {
 
             if (validationQuery.q) {
                 const searchTerm = `%${validationQuery.q}%`;
+
                 queryBuilder.where(
                     new Brackets((qb) => {
                         qb.where(
@@ -80,14 +81,7 @@ export class UserService {
                             {
                                 q: searchTerm,
                             },
-                        );
-                        qb.where("user.email ILike :q", { q: searchTerm })
-                            .orWhere("user.phoneNumber ILike :q", {
-                                q: searchTerm,
-                            })
-                            .orWhere("user.address ILike :q", {
-                                q: searchTerm,
-                            });
+                        ).orWhere("user.email ILike :q", { q: searchTerm });
                     }),
                 );
             }
@@ -99,17 +93,18 @@ export class UserService {
             //     });
             // }
 
-            return await queryBuilder
+            const result = await queryBuilder
                 .skip(
                     (validationQuery.currentPage - 1) * validationQuery.perPage,
                 )
                 .take(validationQuery.perPage)
                 .orderBy("user.id", "DESC")
                 .getManyAndCount();
+            return result;
         } catch (error) {
             const err = createHttpError(
                 500,
-                "Failed to fetch all seller infomation from database",
+                "Failed to fetch all user infomation from database",
             );
             throw err;
         }
