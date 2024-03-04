@@ -6,7 +6,7 @@ import createHttpError from "http-errors";
 
 import {
     AuthRequest,
-    IPagination,
+    IQueryParams,
     IUpdateInfoUserRequest,
     LoginRequest,
     MuterDeleteRequest,
@@ -324,7 +324,7 @@ export class UserAuthController {
         try {
             const validationQuery = matchedData(req, { onlyValidData: true });
             const [users, count] = await this.userService.getAll(
-                validationQuery as IPagination,
+                validationQuery as IQueryParams,
             );
             this.logger.info("All user have been fetched");
             res.json({

@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import {
     IBasicSellerData,
-    IPagination,
+    IQueryParams,
     ISellerData,
 } from "../types/index.types";
 import { AppDataSource } from "../config/data-source";
@@ -79,7 +79,7 @@ export class SellerService {
         });
     }
 
-    async getAll(validateQuery: IPagination) {
+    async getAll(validateQuery: IQueryParams) {
         try {
             const queryBuilder = this.sellerRepository.createQueryBuilder();
             return await queryBuilder

@@ -147,7 +147,8 @@ export interface MuterDeleteRequest extends RequestHandler {
     files: MulterFiles;
 }
 
-export interface IPagination {
+export interface IQueryParams {
     perPage: number;
     currentPage: number;
+    q: unknown;
 }

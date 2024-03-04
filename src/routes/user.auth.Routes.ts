@@ -30,7 +30,7 @@ import parseRefreshTokenMiddleware from "../middlewares/parseRefreshToken.middle
 import { Roles } from "../contants/index.constant";
 import { canAccess } from "../middlewares/canAccess.middleware";
 import { updateInfoValidation } from "../validators/updateInfoUser.validator";
-import paginationValidator from "../validators/pagination.validator";
+import paginationValidator from "../validators/query.validator";
 import { multerUpload } from "../utils/multer";
 
 const router = exprees.Router();

@@ -7,7 +7,7 @@ import createHttpError from "http-errors";
 import {
     AuthRequest,
     ICreateSellerRequest,
-    IPagination,
+    IQueryParams,
     IUpdateInfoSellerRequest,
     LoginRequest,
     MuterDeleteRequest,
@@ -300,7 +300,7 @@ export class SellerAuthController {
         try {
             const validateQuery = matchedData(req, { onlyValidData: true });
             const [sellers, count] = await this.sellerService.getAll(
-                validateQuery as IPagination,
+                validateQuery as IQueryParams,
             );
             this.logger.info("All seller have been fetched");
             res.json({

@@ -28,7 +28,7 @@ import { Roles } from "../contants/index.constant";
 import { SellerTokenService } from "../services/Seller.Token.Service";
 import { updateInfoValidation } from "../validators/updateInfoSeller.validator";
 import { multerUpload } from "../utils/multer";
-import paginationValidator from "../validators/pagination.validator";
+import paginationValidator from "../validators/query.validator";
 
 const router = exprees.Router();
 
